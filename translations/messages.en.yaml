@@ -8,6 +8,7 @@ nav:
     language: Language
     home: Home
     references: Reference data
+    targets: Targets
 role:
     member: Member
     admin: Administrator
@@ -36,6 +37,9 @@ reference:
         origins: Origins of replication
         tags: Tags
         suppliers: Suppliers
+        complexes: Complexes
+        genes: Genes
+        products: Products
     field:
         name: Name
         notes: Notes
@@ -76,6 +80,7 @@ reference:
     restore: Restore
     save: Save
     cancel: Cancel
+    back: Back to the list
     details: Details
     usages: Uses
     actions: Actions
@@ -97,3 +102,44 @@ reference:
         taxid_missing: NCBI taxid not provided.
         concentration_range: "Working concentration outside the indicative range %low%–%high% µg/mL (unsourced range): please check."
         used_entry_changed: "This entry is used %count% times: changing it alters the meaning of those objects."
+target:
+    title: Targets
+    tabs: Target lists
+    field:
+        genes: Genes
+        organism: Organism
+        product_name: Name of the CDS product
+        source_database: Source database
+        source_definition: Definition in the source database
+        cds: Coding sequence (CDS, 5′→3′)
+        gene: Gene
+        product_type: Product type
+        start_nt: Start (nt, 1-based)
+        end_nt: End (nt, 1-based, included)
+    help:
+        cds: "A, C, G, T and IUPAC codes; spaces and case are ignored. Length must be a multiple of 3. The sequence is kept exactly as typed."
+        window: "Positions in nucleotides on the CDS of the gene, 1-based, both ends included. Leave empty for the whole CDS. For a protein, the window must start at the first nucleotide of a codon."
+    source_database:
+        embl: EMBL
+        genbank: NCBI GenBank
+        dbj: DDBJ
+        sgd: SGD
+        swissprot: Swiss-Prot
+    product_type:
+        protein: Protein
+        rna: RNA
+        dna: DNA
+    whole_cds: Whole CDS
+    window: Window
+    length: Length
+    cds_length: CDS length
+    protein_length: Protein length
+    mass: Molecular weight
+    translation: Translation (organism's genetic code table)
+    no_sequence: The sequence cannot be derived (gene without a valid CDS, or invalid window).
+    warning:
+        no_start_codon: "The CDS does not start with ATG (an alternative start codon is possible)."
+        no_stop_codon: "The CDS does not end with a stop codon (under the organism's genetic code table)."
+        internal_stop: "%count% in-frame stop codon(s) before the end: readthrough, selenocysteine, pseudogene or wrong genetic code table?"
+        ambiguity_codes: "The CDS contains ambiguity codes (N, R, Y...): the translation may contain X."
+        window_has_stop: "The protein window contains a stop codon."

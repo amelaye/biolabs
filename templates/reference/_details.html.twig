@@ -8,4 +8,10 @@
     {{ ('reference.tag_purpose.' ~ entry.purpose.value)|trans }}{% if entry.dnaSequence %} · {{ entry.dnaSequence|length }} nt{% endif %}
 {% elseif type == 'suppliers' %}
     {% if entry.url and (entry.url starts with 'http://' or entry.url starts with 'https://') %}<a href="{{ entry.url }}" rel="noopener noreferrer" target="_blank">{{ entry.url }}</a>{% endif %}
+{% elseif type == 'complexes' %}
+    {{ entry.genes|map(g => g.name)|join(', ') }}
+{% elseif type == 'genes' %}
+    {{ entry.organism.name }}{% if entry.productName %} · {{ entry.productName }}{% endif %} · {{ entry.cdsLength }} nt
+{% elseif type == 'products' %}
+    {{ ('target.product_type.' ~ entry.type.value)|trans }} · {{ entry.gene.name }}{% if entry.startNt is not null %} · {{ entry.startNt }}–{{ entry.endNt }} nt{% else %} · {{ 'target.whole_cds'|trans }}{% endif %}
 {% endif %}

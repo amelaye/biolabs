@@ -44,16 +44,30 @@ class Strain extends AbstractReference
     #[ORM\JoinTable(name: 'bl_strain_resistance')]
     private Collection $resistances;
 
+    /**
+     * Strain constructor: starts with no resistance.
+     */
     public function __construct()
     {
         $this->resistances = new ArrayCollection();
     }
 
+    /**
+     * Laboratory use of the strain.
+     *
+     * @return StrainUsage|null Cloning, expression or both, null if not specified
+     */
     public function getUsage(): ?StrainUsage
     {
         return $this->usage;
     }
 
+    /**
+     * Sets the laboratory use of the strain.
+     *
+     * @param StrainUsage|null $usage Use, null if not specified
+     * @return static This entity
+     */
     public function setUsage(?StrainUsage $usage): static
     {
         $this->usage = $usage;
@@ -61,11 +75,22 @@ class Strain extends AbstractReference
         return $this;
     }
 
+    /**
+     * Genotype as written by the laboratory.
+     *
+     * @return string|null The genotype, null if not provided
+     */
     public function getGenotype(): ?string
     {
         return $this->genotype;
     }
 
+    /**
+     * Sets the genotype; an empty text is stored as null.
+     *
+     * @param string|null $genotype Genotype as typed
+     * @return static This entity
+     */
     public function setGenotype(?string $genotype): static
     {
         $genotype = null === $genotype ? null : trim($genotype);
@@ -74,11 +99,22 @@ class Strain extends AbstractReference
         return $this;
     }
 
+    /**
+     * Tells whether the strain carries the lambda DE3 lysogen (T7 RNA polymerase).
+     *
+     * @return bool True for a DE3 strain
+     */
     public function isDe3(): bool
     {
         return $this->de3;
     }
 
+    /**
+     * Marks the strain as carrying the lambda DE3 lysogen.
+     *
+     * @param bool $de3 True for a DE3 strain
+     * @return static This entity
+     */
     public function setDe3(bool $de3): static
     {
         $this->de3 = $de3;
@@ -87,13 +123,21 @@ class Strain extends AbstractReference
     }
 
     /**
-     * @return Collection<int, SelectionMarker>
+     * Selection markers the strain is resistant to.
+     *
+     * @return Collection<int, SelectionMarker> The resistances
      */
     public function getResistances(): Collection
     {
         return $this->resistances;
     }
 
+    /**
+     * Adds a resistance (ignored if already present).
+     *
+     * @param SelectionMarker $marker Marker the strain is resistant to
+     * @return static This entity
+     */
     public function addResistance(SelectionMarker $marker): static
     {
         if (!$this->resistances->contains($marker)) {
@@ -103,6 +147,12 @@ class Strain extends AbstractReference
         return $this;
     }
 
+    /**
+     * Removes a resistance.
+     *
+     * @param SelectionMarker $marker Marker to remove
+     * @return static This entity
+     */
     public function removeResistance(SelectionMarker $marker): static
     {
         $this->resistances->removeElement($marker);

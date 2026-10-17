@@ -27,11 +27,22 @@ class Supplier extends AbstractReference
     #[Assert\Url(message: 'supplier.url.invalid', protocols: ['http', 'https'], requireTld: true)]
     private ?string $url = null;
 
+    /**
+     * Web site of the supplier.
+     *
+     * @return string|null The address, null if not provided
+     */
     public function getUrl(): ?string
     {
         return $this->url;
     }
 
+    /**
+     * Sets the web site; an empty text is stored as null. Only http and https are accepted by the validation.
+     *
+     * @param string|null $url Address as typed
+     * @return static This entity
+     */
     public function setUrl(?string $url): static
     {
         $url = null === $url ? null : trim($url);

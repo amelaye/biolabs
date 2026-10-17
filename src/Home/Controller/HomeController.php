@@ -18,6 +18,11 @@ use Symfony\Component\Routing\Attribute\Route;
  */
 final class HomeController extends AbstractController
 {
+    /**
+     * Home page, shown after the login.
+     *
+     * @return Response The rendered home page
+     */
     #[Route('/', name: 'app_home', methods: ['GET'])]
     public function index(): Response
     {

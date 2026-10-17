@@ -16,6 +16,11 @@ use App\Tests\Support\DatabaseWebTestCase;
  */
 final class LocaleTest extends DatabaseWebTestCase
 {
+    /**
+     * Tests that the interface is in French when nothing was chosen.
+     *
+     * @return void
+     */
     public function testDefaultLanguageIsFrench(): void
     {
         $this->client->request('GET', '/login');
@@ -24,6 +29,11 @@ final class LocaleTest extends DatabaseWebTestCase
         self::assertSelectorExists('html[lang="fr"]');
     }
 
+    /**
+     * Tests that a language chosen with ?_locale= is kept for the next requests.
+     *
+     * @return void
+     */
     public function testLanguageChoiceIsKeptInSession(): void
     {
         $this->client->request('GET', '/login?_locale=en');
@@ -34,6 +44,11 @@ final class LocaleTest extends DatabaseWebTestCase
         self::assertSelectorExists('html[lang="en"]');
     }
 
+    /**
+     * Tests that an unsupported ?_locale= value does not change the language.
+     *
+     * @return void
+     */
     public function testUnsupportedLanguageIsIgnored(): void
     {
         $this->client->request('GET', '/login?_locale=xx');
@@ -41,6 +56,11 @@ final class LocaleTest extends DatabaseWebTestCase
         self::assertSelectorExists('html[lang="fr"]');
     }
 
+    /**
+     * Tests that the language selector marks the current language.
+     *
+     * @return void
+     */
     public function testLanguageSwitchMarksTheCurrentLanguage(): void
     {
         $this->client->request('GET', '/login');

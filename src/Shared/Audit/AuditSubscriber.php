@@ -27,12 +27,24 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 #[AsDoctrineListener(event: Events::onFlush)]
 final class AuditSubscriber
 {
+    /**
+     * AuditSubscriber constructor.
+     *
+     * @param TokenStorageInterface $tokenStorage Gives the signed-in person
+     * @param ClockInterface $clock Source of the current time (replaceable in tests)
+     */
     public function __construct(
         private readonly TokenStorageInterface $tokenStorage,
         private readonly ClockInterface $clock,
     ) {
     }
 
+    /**
+     * Stamps every inserted or really modified auditable entity with the date and the signed-in person.
+     *
+     * @param OnFlushEventArgs $args Doctrine flush event, gives the entity manager and its unit of work
+     * @return void
+     */
     public function onFlush(OnFlushEventArgs $args): void
     {
         $em = $args->getObjectManager();
@@ -55,6 +67,12 @@ final class AuditSubscriber
         }
     }
 
+    /**
+     * Signed-in person as a reference attached to the current unit of work.
+     *
+     * @param EntityManagerInterface $em Entity manager that receives the reference
+     * @return User|null The user reference, null when nobody is signed in (console, import) or the user is not stored yet
+     */
     private function currentUser(EntityManagerInterface $em): ?User
     {
         $user = $this->tokenStorage->getToken()?->getUser();

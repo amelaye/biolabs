@@ -19,6 +19,11 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusExce
  */
 final class UserCheckerTest extends TestCase
 {
+    /**
+     * Tests that an active, non-system account passes the pre-authentication check.
+     *
+     * @return void
+     */
     public function testActiveUserPasses(): void
     {
         (new UserChecker())->checkPreAuth(new User('a@example.org', 'A'));
@@ -26,6 +31,11 @@ final class UserCheckerTest extends TestCase
         $this->addToAssertionCount(1);
     }
 
+    /**
+     * Tests that deactivated and system accounts are refused with one message that does not tell them apart.
+     *
+     * @return void
+     */
     public function testInactiveAndSystemAccountsAreRejectedWithTheSameMessage(): void
     {
         $messages = [];

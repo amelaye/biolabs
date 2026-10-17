@@ -85,6 +85,10 @@ bin/console doctrine:migrations:diff           # doit répondre « No changes de
 Piège connu : `doctrine:schema:validate` signale toujours les tables de biophp (voir `docs/lots/LAB-0.md`) ; utiliser `migrations:diff`.
 Les migrations s'écrivent avec l'API `Schema` (pas de SQL brut) pour rester valables sur SQLite et MySQL.
 
+## Plasmi::db n'est pas une référence de justesse
+
+Plasmi::db 0.9.1 est un programme inachevé et bogué (voir `.claude/skills/plasmidb-domain/references/legacy-defects.md`). Pour tout ce qui est **scientifique** (données, validations, calculs, unités), ne pas reprendre son comportement : raisonner en biologiste, vérifier sur une source fiable, et corriger. « Comme le legacy » ne s'applique qu'aux choix de fonctionnement sans enjeu scientifique (comptes locaux, rôles, audit non purgé).
+
 ## Règles permanentes
 
 - **En-tête de tout fichier PHP créé ou modifié** (même convention que biophp et biotools) : bloc de tête avant `declare(strict_types=1);` puis `@author` dans la docblock de la classe.
@@ -97,6 +101,8 @@ Les migrations s'écrivent avec l'API `Schema` (pas de SQL brut) pour rester val
    */
   ```
   et `@author Amélie DUVERNET aka Amelaye <amelieonline@gmail.com>`. La date « Created » ne change jamais ; **« Last modified » est mise à jour à chaque modification du fichier** (format `17 October 2026`, mois en anglais). Ne pas toucher la date d'un fichier non modifié.
+- **Toute fonction et méthode est documentée** (src, tests, migrations), comme dans biophp et biotools : docblock en anglais avec une description, un `@param type $nom description` par paramètre, un `@return type description` (sauf constructeur) et `@throws` si une exception peut sortir. `tests/Unit/DocumentationTest.php` le vérifie.
+- **Utiliser biophp/biotools d'abord** : chercher une classe, constante ou value object existant dans `vendor/amelaye/` avant d'écrire une liste, une validation ou une normalisation locale.
 - Ne jamais copier de code de `../plasmidb-0.9.1/` ; s'en inspirer fonctionnellement.
 - Ne jamais recopier les secrets, hash, sessions ou emails présents dans `../plasmidb-0.9.1/plasmidb/config/` et dans le dump SQL — ni dans le code, ni dans les fixtures, ni dans une réponse.
 - Fixtures et exemples de test : données synthétiques.

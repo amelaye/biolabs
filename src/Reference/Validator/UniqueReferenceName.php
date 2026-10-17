@@ -20,6 +20,11 @@ final class UniqueReferenceName extends Constraint
     public string $message = 'reference.name.already_used';
     public string $archivedMessage = 'reference.name.already_used_archived';
 
+    /**
+     * The constraint applies to the whole entry (class constraint).
+     *
+     * @return string|array The constraint target
+     */
     public function getTargets(): string|array
     {
         return self::CLASS_CONSTRAINT;

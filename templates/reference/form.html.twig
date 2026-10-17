@@ -3,7 +3,7 @@
 {% block title %}{{ (is_new ? 'reference.new' : 'reference.edit')|trans }} · {{ ('reference.type.' ~ type)|trans }}{% endblock %}
 
 {% block body %}
-<h1>{{ 'reference.title'|trans }}</h1>
+<h1>{{ (group ~ '.title')|trans }}</h1>
 {% include 'reference/_tabs.html.twig' %}
 
 <section class="card card-form">
@@ -19,7 +19,7 @@
     {{ form_start(form, {attr: {novalidate: 'novalidate', class: 'ref-form'}}) }}
         {{ form_widget(form) }}
         <button class="btn btn-primary" type="submit">{{ 'reference.save'|trans }}</button>
-        <a class="btn" href="{{ path('app_reference_index', {type: type}) }}">{{ 'reference.cancel'|trans }}</a>
+        <a class="btn" href="{{ path('app_' ~ group ~ '_index', {type: type}) }}">{{ 'reference.cancel'|trans }}</a>
     {{ form_end(form) }}
 </section>
 {% endblock %}

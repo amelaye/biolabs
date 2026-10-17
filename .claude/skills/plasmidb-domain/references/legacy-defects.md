@@ -28,6 +28,23 @@ Liste de départ, à compléter au fil des analyses. Chaque entrée : emplacemen
 | `enzyme.enzyme_sequence` | Site de reconnaissance sans position de coupure | Impossible de calculer les extrémités cohésives depuis cette table |
 | `species.species_ncbi_trans_tab` | Table génétique disponible mais non utilisée par `Translator` historique (à vérifier) | Traduction potentiellement fausse pour mitochondries / ciliés / mycoplasmes |
 
+## Défauts constatés sur les référentiels (LAB-1)
+
+| Emplacement | Constat | Preuve |
+|---|---|---|
+| `species` | `Homo sapiens` stocké avec taxid **0** (NCBI : 9606) | dump, table `species` |
+| `species` | `Methanococcus jannaschii` stocké avec table génétique **0** (inexistante au NCBI ; les archées utilisent la 11) | dump, table `species` |
+| `species.species_name varchar(30)` | noms tronqués : `Clostridium thermocellum ATCC `, `Thermoplasma acidophilum DSM 1` | dump |
+| `species` | aucune validation de la table génétique ni du taxid | formulaire `app/views/species/_form.phtml` |
+| `strain` | génotype et résistances uniquement en texte libre ; XL1-Blue est Tet^r mais seule la note du marqueur tétracycline le dit | dump, tables `strain` et `marker` |
+| `marker` | concentration de travail en texte libre (`50ug/ml`), jamais exploitable | dump |
+| `puri_fusion`, `detect_fusion`, `seqorigin`, `stocktype`, `repliorig` | valeurs « aucun » codées en lignes (`No purification tag`…) ; `repliorig` ne contient qu'un placeholder `Unknown?!` | dump |
+| `stocktype.strain_id` | colonne jamais renseignée, sans sens | dump |
+| `std_plasmid.cleavage_id` | référence une table `cleavage` qui n'existe pas | schéma |
+| `enzyme` | 646 sites sans position de coupure ; `TaqII` en double avec deux séquences ; 78 sites en minuscules par artefact d'import (le code les passe en majuscules, `Bio/Bio/Restriction/RestrictionEnzyme.php:370-375`) | dump, code |
+| dump entier | UTF-8 **doublement encodé** dans un fichier déclaré latin1 (`-20°C` → `C3 82 C2 B0`), non UTF-8 valide globalement | octets du dump |
+| `RestrictionEnzyme::setSite` | n'exige qu'**un** caractère IUPAC valide, pas tous (`preg_match` sans ancres) | `RestrictionEnzyme.php:370-375` |
+
 ## Défauts de données / schéma
 
 | Emplacement | Constat |

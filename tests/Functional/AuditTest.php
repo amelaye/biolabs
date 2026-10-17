@@ -19,6 +19,11 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  */
 final class AuditTest extends DatabaseWebTestCase
 {
+    /**
+     * Tests that a write outside a session (console, import) records the date but no author.
+     *
+     * @return void
+     */
     public function testCreationWithoutConnectedUserHasNoAuthor(): void
     {
         $user = $this->createUser();
@@ -28,6 +33,11 @@ final class AuditTest extends DatabaseWebTestCase
         self::assertEquals($user->getCreatedAt(), $user->getUpdatedAt());
     }
 
+    /**
+     * Tests that the signed-in person is recorded as author of a creation.
+     *
+     * @return void
+     */
     public function testCreationRecordsTheConnectedUser(): void
     {
         $admin = $this->createUser('admin@example.org', 'Admin', roles: [User::ROLE_ADMIN]);
@@ -39,6 +49,11 @@ final class AuditTest extends DatabaseWebTestCase
         self::assertSame($admin->getId(), $created->getUpdatedBy()?->getId());
     }
 
+    /**
+     * Tests that an update records its author and date and leaves the creation date and author unchanged.
+     *
+     * @return void
+     */
     public function testUpdateRecordsWhoAndWhenButKeepsCreation(): void
     {
         $author = $this->createUser('author@example.org', 'Author');
@@ -63,6 +78,11 @@ final class AuditTest extends DatabaseWebTestCase
         self::assertGreaterThanOrEqual($createdAt, $reloaded->getUpdatedAt());
     }
 
+    /**
+     * Tests that a flush without any real change does not touch the update date.
+     *
+     * @return void
+     */
     public function testFlushWithoutChangeDoesNotMarkTheEntityAsUpdated(): void
     {
         $user = $this->createUser();
@@ -74,6 +94,12 @@ final class AuditTest extends DatabaseWebTestCase
         self::assertEquals($updatedAt, $user->getUpdatedAt());
     }
 
+    /**
+     * Signs a user in for the audit tests without going through the login form.
+     *
+     * @param User $user Account to sign in
+     * @return void
+     */
     private function authenticateAs(User $user): void
     {
         static::getContainer()->get(TokenStorageInterface::class)

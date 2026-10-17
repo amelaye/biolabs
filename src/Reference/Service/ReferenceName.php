@@ -21,6 +21,12 @@ namespace App\Reference\Service;
  */
 final class ReferenceName
 {
+    /**
+     * Display form of a name: Unicode NFC, trimmed, runs of whitespace collapsed; case, accents, parentheses and Greek letters are kept.
+     *
+     * @param string|null $name Name as typed
+     * @return string The display form, empty for null
+     */
     public static function display(?string $name): string
     {
         $name = $name ?? '';
@@ -31,11 +37,23 @@ final class ReferenceName
         return trim((string) preg_replace('/\s+/u', ' ', $name));
     }
 
+    /**
+     * Unique key of a name: its display form lowercased.
+     *
+     * @param string|null $name Name as typed
+     * @return string The key
+     */
     public static function key(?string $name): string
     {
         return mb_strtolower(self::display($name));
     }
 
+    /**
+     * Loose key used to spot near-duplicates: the key with everything but letters and digits removed.
+     *
+     * @param string|null $name Name as typed
+     * @return string The loose key
+     */
     public static function looseKey(?string $name): string
     {
         return (string) preg_replace('/[^\p{L}\p{N}]+/u', '', self::key($name));

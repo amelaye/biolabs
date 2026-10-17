@@ -23,10 +23,24 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
  */
 final class UniqueReferenceNameValidator extends ConstraintValidator
 {
+    /**
+     * UniqueReferenceNameValidator constructor.
+     *
+     * @param EntityManagerInterface $em Entity manager used to look for the other entry
+     */
     public function __construct(private readonly EntityManagerInterface $em)
     {
     }
 
+    /**
+     * Refuses a name whose normalised key is already used by another entry of the same list,
+     * active or archived (an archived duplicate is offered for restoration).
+     *
+     * @param mixed $value The entry to validate
+     * @param Constraint $constraint The UniqueReferenceName constraint
+     * @return void
+     * @throws UnexpectedTypeException If the constraint is of another type
+     */
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof UniqueReferenceName) {

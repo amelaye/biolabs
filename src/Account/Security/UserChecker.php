@@ -23,6 +23,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 final class UserChecker implements UserCheckerInterface
 {
+    /**
+     * Refuses the login of a deactivated or system account, before the password is checked.
+     *
+     * @param UserInterface $user Account that tries to sign in
+     * @return void
+     * @throws CustomUserMessageAccountStatusException When the account cannot sign in
+     */
     public function checkPreAuth(UserInterface $user): void
     {
         if (!$user instanceof User) {
@@ -34,6 +41,12 @@ final class UserChecker implements UserCheckerInterface
         }
     }
 
+    /**
+     * Nothing to check after the authentication.
+     *
+     * @param UserInterface $user Account that just signed in
+     * @return void
+     */
     public function checkPostAuth(UserInterface $user): void
     {
     }

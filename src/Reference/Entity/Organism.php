@@ -51,11 +51,10 @@ class Organism extends AbstractReference
     private ?int $mitochondrialGeneticCode = null;
 
     /**
-     * Names of the selectable tables, by table number (NCBI wording, from biophp).
+     * Names of the selectable genetic code tables, by table number (NCBI wording, from biophp).
      *
-     * @param list<int> $codes
-     *
-     * @return array<int, string> NCBI wording by table number
+     * @param list<int> $codes NCBI table numbers
+     * @return array<int, string> NCBI name by table number
      */
     public static function geneticCodeNames(array $codes): array
     {
@@ -67,11 +66,22 @@ class Organism extends AbstractReference
         return $names;
     }
 
+    /**
+     * NCBI taxonomy identifier.
+     *
+     * @return int|null The taxid, null if not provided
+     */
     public function getTaxId(): ?int
     {
         return $this->taxId;
     }
 
+    /**
+     * Sets the NCBI taxonomy identifier.
+     *
+     * @param int|null $taxId Taxid (positive), null if unknown
+     * @return static This entity
+     */
     public function setTaxId(?int $taxId): static
     {
         $this->taxId = $taxId;
@@ -79,11 +89,22 @@ class Organism extends AbstractReference
         return $this;
     }
 
+    /**
+     * NCBI genetic code table used to translate the genes of this organism.
+     *
+     * @return int|null The table number
+     */
     public function getGeneticCode(): ?int
     {
         return $this->geneticCode;
     }
 
+    /**
+     * Sets the NCBI genetic code table.
+     *
+     * @param int|null $geneticCode Table number among {@see Organism::GENETIC_CODES}
+     * @return static This entity
+     */
     public function setGeneticCode(?int $geneticCode): static
     {
         $this->geneticCode = $geneticCode;
@@ -91,11 +112,22 @@ class Organism extends AbstractReference
         return $this;
     }
 
+    /**
+     * NCBI genetic code table of the mitochondrial genes.
+     *
+     * @return int|null The table number, null if not provided
+     */
     public function getMitochondrialGeneticCode(): ?int
     {
         return $this->mitochondrialGeneticCode;
     }
 
+    /**
+     * Sets the NCBI mitochondrial genetic code table.
+     *
+     * @param int|null $mitochondrialGeneticCode Table number among {@see Organism::MITOCHONDRIAL_GENETIC_CODES}, null if not provided
+     * @return static This entity
+     */
     public function setMitochondrialGeneticCode(?int $mitochondrialGeneticCode): static
     {
         $this->mitochondrialGeneticCode = $mitochondrialGeneticCode;

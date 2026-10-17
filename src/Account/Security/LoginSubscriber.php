@@ -22,12 +22,24 @@ use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
  */
 final class LoginSubscriber implements EventSubscriberInterface
 {
+    /**
+     * LoginSubscriber constructor.
+     *
+     * @param UserRepository $users Repository used to record the login date
+     * @param ClockInterface $clock Source of the current time
+     */
     public function __construct(
         private readonly UserRepository $users,
         private readonly ClockInterface $clock,
     ) {
     }
 
+    /**
+     * Records the date of a successful login.
+     *
+     * @param LoginSuccessEvent $event Security event, gives the signed-in user
+     * @return void
+     */
     public function onLoginSuccess(LoginSuccessEvent $event): void
     {
         $user = $event->getUser();
@@ -38,6 +50,11 @@ final class LoginSubscriber implements EventSubscriberInterface
         $this->users->touchLastLogin($user, \DateTimeImmutable::createFromInterface($this->clock->now()));
     }
 
+    /**
+     * Events this subscriber listens to.
+     *
+     * @return array<class-string, string> Method name by event class
+     */
     public static function getSubscribedEvents(): array
     {
         return [LoginSuccessEvent::class => 'onLoginSuccess'];

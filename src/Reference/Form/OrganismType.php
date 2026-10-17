@@ -20,6 +20,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class OrganismType extends PlainReferenceType
 {
+    /**
+     * Adds the taxid and the genetic code tables (names from biophp) to the common fields.
+     *
+     * @param FormBuilderInterface $builder Form builder
+     * @param array<string, mixed> $options Form options
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildForm($builder, $options);
@@ -30,9 +37,10 @@ final class OrganismType extends PlainReferenceType
     }
 
     /**
-     * @param list<int> $codes
+     * Choices of a genetic code select.
      *
-     * @return array<string, int> "11 - Bacterial, Archaeal and Plant Plastid" => 11
+     * @param list<int> $codes NCBI table numbers
+     * @return array<string, int> Label ("11 - Bacterial, Archaeal and Plant Plastid") => table number
      */
     private static function choices(array $codes): array
     {
@@ -44,6 +52,12 @@ final class OrganismType extends PlainReferenceType
         return $choices;
     }
 
+    /**
+     * Binds the form to its entity class.
+     *
+     * @param OptionsResolver $resolver Resolver of the form options
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => Organism::class]);

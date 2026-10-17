@@ -20,6 +20,11 @@ use App\Tests\Support\DatabaseWebTestCase;
  */
 final class ReferenceScreensTest extends DatabaseWebTestCase
 {
+    /**
+     * Tests that an anonymous visitor is sent to the login page.
+     *
+     * @return void
+     */
     public function testAnonymousVisitorIsRedirectedToLogin(): void
     {
         $this->client->request('GET', '/references/strains');
@@ -27,6 +32,11 @@ final class ReferenceScreensTest extends DatabaseWebTestCase
         self::assertResponseRedirects('/login');
     }
 
+    /**
+     * Tests that a member reaches every list and creation form, and that the menu has the entry.
+     *
+     * @return void
+     */
     public function testMemberSeesEveryListAndTheMenuEntry(): void
     {
         $this->client->loginUser($this->createUser());
@@ -40,6 +50,11 @@ final class ReferenceScreensTest extends DatabaseWebTestCase
         self::assertSelectorExists('.main-nav a[href="/references"]');
     }
 
+    /**
+     * Tests that an unknown list gives a 404.
+     *
+     * @return void
+     */
     public function testUnknownListIs404(): void
     {
         $this->client->loginUser($this->createUser());
@@ -48,6 +63,11 @@ final class ReferenceScreensTest extends DatabaseWebTestCase
         self::assertResponseStatusCodeSame(404);
     }
 
+    /**
+     * Tests that a strain is created with its resistances and the audit author is filled.
+     *
+     * @return void
+     */
     public function testMemberCreatesAStrainWithResistancesAndAuditIsFilled(): void
     {
         $user = $this->createUser();
@@ -72,6 +92,11 @@ final class ReferenceScreensTest extends DatabaseWebTestCase
         self::assertSame($user->getId(), $strain->getCreatedBy()?->getId());
     }
 
+    /**
+     * Tests that a duplicate name is refused and that an archived duplicate suggests the restoration.
+     *
+     * @return void
+     */
     public function testDuplicateNameIsRefusedAndArchivedDuplicateSuggestsRestoration(): void
     {
         $this->client->loginUser($this->createUser());
@@ -86,6 +111,11 @@ final class ReferenceScreensTest extends DatabaseWebTestCase
         self::assertCount(1, $this->em->getRepository(Strain::class)->findAll());
     }
 
+    /**
+     * Tests that an invalid organism gives a 422 with errors and is not saved.
+     *
+     * @return void
+     */
     public function testInvalidOrganismShowsErrorsAndSavesNothing(): void
     {
         $this->client->loginUser($this->createUser());
@@ -97,6 +127,11 @@ final class ReferenceScreensTest extends DatabaseWebTestCase
         self::assertCount(0, $this->em->getRepository(Organism::class)->findAll());
     }
 
+    /**
+     * Tests that archiving hides an entry from the default list and restoring brings it back.
+     *
+     * @return void
+     */
     public function testArchiveHidesFromDefaultListAndRestoreBringsItBack(): void
     {
         $this->client->loginUser($this->createUser());
@@ -118,6 +153,11 @@ final class ReferenceScreensTest extends DatabaseWebTestCase
         self::assertSelectorTextContains('table.data', 'Tuner');
     }
 
+    /**
+     * Tests that archiving with a forged token is refused (403) and changes nothing.
+     *
+     * @return void
+     */
     public function testArchiveWithoutValidCsrfTokenIsRefused(): void
     {
         $this->client->loginUser($this->createUser());
@@ -132,6 +172,11 @@ final class ReferenceScreensTest extends DatabaseWebTestCase
         self::assertTrue($this->em->find(Strain::class, $strain->getId())->isActive());
     }
 
+    /**
+     * Tests that no deletion route exists.
+     *
+     * @return void
+     */
     public function testThereIsNoDeleteRoute(): void
     {
         $this->client->loginUser($this->createUser());
@@ -147,6 +192,11 @@ final class ReferenceScreensTest extends DatabaseWebTestCase
         self::assertResponseStatusCodeSame(404);
     }
 
+    /**
+     * Tests that an archived marker stays on the strain that carries it but is not offered to other strains.
+     *
+     * @return void
+     */
     public function testArchivedMarkerStaysOnTheStrainButIsNotOfferedToOthers(): void
     {
         $this->client->loginUser($this->createUser());
@@ -169,6 +219,11 @@ final class ReferenceScreensTest extends DatabaseWebTestCase
         self::assertStringContainsString('OldMarker', $crawler->filter('table.data')->text());
     }
 
+    /**
+     * Tests that names and notes are HTML-escaped in the list.
+     *
+     * @return void
+     */
     public function testNamesAndNotesAreEscaped(): void
     {
         $this->client->loginUser($this->createUser());
@@ -181,6 +236,11 @@ final class ReferenceScreensTest extends DatabaseWebTestCase
         self::assertStringContainsString('<script>alert(1)</script>', $crawler->filter('table.data')->text());
     }
 
+    /**
+     * Tests that a supplier link opens with noopener and that a non-http scheme is never rendered as a link.
+     *
+     * @return void
+     */
     public function testSupplierLinkIsOpenedSafelyAndUnsafeSchemeIsNeverLinked(): void
     {
         $this->client->loginUser($this->createUser());
@@ -198,6 +258,11 @@ final class ReferenceScreensTest extends DatabaseWebTestCase
         self::assertSelectorNotExists('a[href^="javascript:"]');
     }
 
+    /**
+     * Tests that % in the search is a literal character, not a wildcard.
+     *
+     * @return void
+     */
     public function testSearchTreatsPercentAsLiteralText(): void
     {
         $this->client->loginUser($this->createUser());
@@ -211,6 +276,11 @@ final class ReferenceScreensTest extends DatabaseWebTestCase
         self::assertSelectorTextNotContains('table.data', 'Alpha');
     }
 
+    /**
+     * Tests that changing a used marker warns with the number of uses.
+     *
+     * @return void
+     */
     public function testRenamingAUsedMarkerWarnsWithTheNumberOfUses(): void
     {
         $this->client->loginUser($this->createUser());
@@ -227,6 +297,11 @@ final class ReferenceScreensTest extends DatabaseWebTestCase
         self::assertSelectorTextContains('.notice-warning', 'utilisée 1 fois');
     }
 
+    /**
+     * Tests that an unusual concentration and a none-like name give warnings but are saved.
+     *
+     * @return void
+     */
     public function testMarkerOutsideUsualRangeAndNoneLikeNameWarnButAreSaved(): void
     {
         $this->client->loginUser($this->createUser());

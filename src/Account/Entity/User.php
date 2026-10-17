@@ -81,27 +81,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Auditab
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $lastLoginAt = null;
 
+    /**
+     * User constructor.
+     *
+     * @param string $email Email address, the login identifier (stored in lowercase)
+     * @param string $displayName Name shown in the interface
+     */
     public function __construct(string $email, string $displayName)
     {
         $this->email = mb_strtolower(trim($email));
         $this->displayName = trim($displayName);
     }
 
+    /**
+     * Primary key.
+     *
+     * @return int|null The identifier, null until the account is stored
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * Email address, the login identifier.
+     *
+     * @return string The address in lowercase
+     */
     public function getEmail(): string
     {
         return $this->email;
     }
 
+    /**
+     * Name shown in the interface.
+     *
+     * @return string The display name
+     */
     public function getDisplayName(): string
     {
         return $this->displayName;
     }
 
+    /**
+     * Changes the name shown in the interface.
+     *
+     * @param string $displayName New display name (surrounding spaces are removed)
+     * @return static This account
+     */
     public function setDisplayName(string $displayName): static
     {
         $this->displayName = trim($displayName);
@@ -109,13 +136,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Auditab
         return $this;
     }
 
+    /**
+     * Identifier used by the security component.
+     *
+     * @return string The email address
+     */
     public function getUserIdentifier(): string
     {
         return $this->email;
     }
 
     /**
-     * @return list<string>
+     * Roles of the account; ROLE_MEMBER is always present.
+     *
+     * @return list<string> The roles
      */
     public function getRoles(): array
     {
@@ -123,9 +157,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Auditab
     }
 
     /**
-     * @param list<string> $roles
+     * Sets the roles of the account.
      *
-     * @throws \InvalidArgumentException if a role is not assignable
+     * @param list<string> $roles Roles to assign, among {@see User::ASSIGNABLE_ROLES}
+     * @return static This account
+     * @throws \InvalidArgumentException If a role is not assignable
      */
     public function setRoles(array $roles): static
     {
@@ -140,10 +176,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Auditab
     }
 
     /**
-     * Keeps the hash out of the session: only its CRC32C fingerprint is serialized,
-     * which is enough for Symfony to invalidate the session after a password change.
+     * Keeps the hash out of the session: only its CRC32C fingerprint is serialized, which is enough for
+     * Symfony to invalidate the session after a password change.
      *
-     * @return array<string, mixed>
+     * @return array<string, mixed> The properties to serialize
      */
     public function __serialize(): array
     {
@@ -154,17 +190,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Auditab
     }
 
     /**
+     * Nothing to erase: the plain password is never kept.
+     *
      * @deprecated since Symfony 7.3; kept because UserInterface requires it in 7.4
+     * @return void
      */
     public function eraseCredentials(): void
     {
     }
 
+    /**
+     * Hashed password.
+     *
+     * @return string The hash, an empty string for a system account
+     */
     public function getPassword(): string
     {
         return $this->password;
     }
 
+    /**
+     * Sets the hashed password.
+     *
+     * @param string $hashedPassword Password already hashed by the hasher
+     * @return static This account
+     */
     public function setPassword(string $hashedPassword): static
     {
         $this->password = $hashedPassword;
@@ -172,11 +222,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Auditab
         return $this;
     }
 
+    /**
+     * Tells whether the account is enabled.
+     *
+     * @return bool True if the account is active
+     */
     public function isActive(): bool
     {
         return $this->active;
     }
 
+    /**
+     * Enables or disables the account.
+     *
+     * @param bool $active True to enable the account
+     * @return static This account
+     */
     public function setActive(bool $active): static
     {
         $this->active = $active;
@@ -184,11 +245,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Auditab
         return $this;
     }
 
+    /**
+     * Tells whether the account is a non-login system account.
+     *
+     * @return bool True for a system account
+     */
     public function isSystem(): bool
     {
         return $this->system;
     }
 
+    /**
+     * Marks the account as a non-login system account.
+     *
+     * @param bool $system True for a system account
+     * @return static This account
+     */
     public function setSystem(bool $system): static
     {
         $this->system = $system;
@@ -196,17 +268,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Auditab
         return $this;
     }
 
-    /** An account can sign in if it is active and is not a system account. */
+    /**
+     * An account can sign in if it is active and is not a system account.
+     *
+     * @return bool True if the person may sign in
+     */
     public function canLogin(): bool
     {
         return $this->active && !$this->system;
     }
 
+    /**
+     * Preferred interface language.
+     *
+     * @return string|null The language code (fr, en), null to follow the browser or the session
+     */
     public function getLocale(): ?string
     {
         return $this->locale;
     }
 
+    /**
+     * Sets the preferred interface language.
+     *
+     * @param string|null $locale Language code (fr, en), null to follow the browser or the session
+     * @return static This account
+     */
     public function setLocale(?string $locale): static
     {
         $this->locale = $locale;
@@ -214,6 +301,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Auditab
         return $this;
     }
 
+    /**
+     * Date of the last successful login.
+     *
+     * @return \DateTimeImmutable|null The date, null if the person never signed in
+     */
     public function getLastLoginAt(): ?\DateTimeImmutable
     {
         return $this->lastLoginAt;

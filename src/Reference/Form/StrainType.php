@@ -25,6 +25,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class StrainType extends PlainReferenceType
 {
+    /**
+     * Adds the use, genotype, DE3 flag and resistances to the common fields. An archived marker is only offered if the strain already carries it.
+     *
+     * @param FormBuilderInterface $builder Form builder
+     * @param array<string, mixed> $options Form options ('data' is the edited strain)
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildForm($builder, $options);
@@ -56,6 +63,12 @@ final class StrainType extends PlainReferenceType
             ]);
     }
 
+    /**
+     * Binds the form to its entity class.
+     *
+     * @param OptionsResolver $resolver Resolver of the form options
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => Strain::class]);

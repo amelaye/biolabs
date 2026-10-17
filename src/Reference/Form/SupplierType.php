@@ -19,12 +19,25 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class SupplierType extends PlainReferenceType
 {
+    /**
+     * Adds the web site to the common fields.
+     *
+     * @param FormBuilderInterface $builder Form builder
+     * @param array<string, mixed> $options Form options
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildForm($builder, $options);
         $builder->add('url', UrlType::class, ['label' => 'reference.field.url', 'required' => false, 'default_protocol' => null]);
     }
 
+    /**
+     * Binds the form to its entity class.
+     *
+     * @param OptionsResolver $resolver Resolver of the form options
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => Supplier::class]);

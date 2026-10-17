@@ -32,6 +32,14 @@ final class CreateUserCommand extends Command
     private const MIN_PASSWORD_LENGTH = 12;
     private const PASSWORD_ENV = 'BIOLABS_USER_PASSWORD';
 
+    /**
+     * CreateUserCommand constructor.
+     *
+     * @param EntityManagerInterface $em Entity manager that stores the account
+     * @param UserRepository $users Repository used to detect an existing account
+     * @param UserPasswordHasherInterface $hasher Hashes the password
+     * @param ValidatorInterface $validator Validates the account before it is stored
+     */
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly UserRepository $users,
@@ -41,6 +49,11 @@ final class CreateUserCommand extends Command
         parent::__construct();
     }
 
+    /**
+     * Declares the arguments, the options and the help of the command.
+     *
+     * @return void
+     */
     protected function configure(): void
     {
         $this
@@ -55,6 +68,14 @@ En mode non interactif, il est lu dans la variable d'environnement BIOLABS_USER_
 HELP);
     }
 
+    /**
+     * Creates an account: validates the role and the data, asks for the password (or reads it from the
+     * environment in non-interactive mode) and stores the account.
+     *
+     * @param InputInterface $input Arguments and options of the command
+     * @param OutputInterface $output Console output
+     * @return int Command::SUCCESS when the account is created, Command::INVALID for a bad role or invalid data, Command::FAILURE otherwise
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
@@ -102,6 +123,14 @@ HELP);
         return Command::SUCCESS;
     }
 
+    /**
+     * Reads the password, hidden and confirmed when interactive, from the environment otherwise.
+     *
+     * @param InputInterface $input Arguments and options of the command
+     * @param OutputInterface $output Console output
+     * @param SymfonyStyle $io Styled console used to ask and report errors
+     * @return string|null The password, null when it is missing, too short or not confirmed (the error is already displayed)
+     */
     private function readPassword(InputInterface $input, OutputInterface $output, SymfonyStyle $io): ?string
     {
         if ($input->isInteractive()) {

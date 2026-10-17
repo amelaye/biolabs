@@ -23,11 +23,22 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20261017194236 extends AbstractMigration
 {
+    /**
+     * Short description shown by the migrations commands.
+     *
+     * @return string The purpose of the migration
+     */
     public function getDescription(): string
     {
         return 'LAB-0: bl_user table (accounts, roles, audit columns)';
     }
 
+    /**
+     * Creates the user table (accounts, roles, audit columns).
+     *
+     * @param Schema $schema Schema to modify
+     * @return void
+     */
     public function up(Schema $schema): void
     {
         $table = $schema->createTable('bl_user');
@@ -53,6 +64,12 @@ final class Version20261017194236 extends AbstractMigration
         $table->addForeignKeyConstraint('bl_user', ['updated_by_id'], ['id'], ['onDelete' => 'SET NULL'], 'FK_E8E71CDC896DBBDE');
     }
 
+    /**
+     * Drops the user table.
+     *
+     * @param Schema $schema Schema to modify
+     * @return void
+     */
     public function down(Schema $schema): void
     {
         $schema->dropTable('bl_user');

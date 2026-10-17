@@ -24,7 +24,10 @@ use Symfony\Component\HttpKernel\KernelEvents;
 final class LocaleSubscriber implements EventSubscriberInterface
 {
     /**
-     * @param string[] $supportedLocales
+     * LocaleSubscriber constructor.
+     *
+     * @param string $defaultLocale Language used when none is stored in the session
+     * @param string[] $supportedLocales Languages offered by the selector
      */
     public function __construct(
         private readonly string $defaultLocale = 'fr',
@@ -32,6 +35,13 @@ final class LocaleSubscriber implements EventSubscriberInterface
     ) {
     }
 
+    /**
+     * Applies the language of the request: the ?_locale= parameter if it is supported (and stores it in
+     * the session), otherwise the language stored in the session, otherwise the default language.
+     *
+     * @param RequestEvent $event Kernel request event
+     * @return void
+     */
     public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
@@ -52,6 +62,11 @@ final class LocaleSubscriber implements EventSubscriberInterface
         $request->setLocale(\in_array($stored, $this->supportedLocales, true) ? $stored : $this->defaultLocale);
     }
 
+    /**
+     * Events this subscriber listens to.
+     *
+     * @return array<string, list<array{string, int}>> Method and priority by event name
+     */
     public static function getSubscribedEvents(): array
     {
         // Priority 20: before Symfony's LocaleListener (16), which would otherwise set the default language.

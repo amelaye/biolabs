@@ -39,11 +39,22 @@ class Tag extends AbstractReference
     #[Assert\Regex(pattern: '/^[ACGT]+$/', message: 'tag.dna_sequence.invalid')]
     private ?string $dnaSequence = null;
 
+    /**
+     * Purpose of the tag.
+     *
+     * @return TagPurpose|null Purification or detection
+     */
     public function getPurpose(): ?TagPurpose
     {
         return $this->purpose;
     }
 
+    /**
+     * Sets the purpose of the tag.
+     *
+     * @param TagPurpose|null $purpose Purification or detection
+     * @return static This entity
+     */
     public function setPurpose(?TagPurpose $purpose): static
     {
         $this->purpose = $purpose;
@@ -51,11 +62,22 @@ class Tag extends AbstractReference
         return $this;
     }
 
+    /**
+     * Normalised DNA sequence of the tag.
+     *
+     * @return string|null The sequence (uppercase, no whitespace), null if not provided
+     */
     public function getDnaSequence(): ?string
     {
         return $this->dnaSequence;
     }
 
+    /**
+     * Sets the DNA sequence, normalised by biophp's DnaSequence. A text that is not a valid sequence is kept cleaned up so that the validation reports it.
+     *
+     * @param string|null $dnaSequence Sequence as typed, null or blank for none
+     * @return static This entity
+     */
     public function setDnaSequence(?string $dnaSequence): static
     {
         $this->dnaSequence = null;

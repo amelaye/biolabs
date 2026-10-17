@@ -27,11 +27,22 @@ final class Version20261017210000 extends AbstractMigration
 {
     private const LISTS = ['organism', 'strain', 'selection_marker', 'promoter', 'replication_origin', 'tag', 'supplier'];
 
+    /**
+     * Short description shown by the migrations commands.
+     *
+     * @return string The purpose of the migration
+     */
     public function getDescription(): string
     {
         return 'LAB-1: reference lists (organism, strain, selection marker, promoter, replication origin, tag, supplier)';
     }
 
+    /**
+     * Creates the seven reference tables and the strain/marker resistance link.
+     *
+     * @param Schema $schema Schema to modify
+     * @return void
+     */
     public function up(Schema $schema): void
     {
         foreach (self::LISTS as $list) {
@@ -66,6 +77,12 @@ final class Version20261017210000 extends AbstractMigration
         $link->addForeignKeyConstraint('bl_selection_marker', ['selection_marker_id'], ['id'], ['onDelete' => 'CASCADE'], $this->identifier('FK', 'bl_strain_resistance', ['selection_marker_id']));
     }
 
+    /**
+     * Drops the reference tables.
+     *
+     * @param Schema $schema Schema to modify
+     * @return void
+     */
     public function down(Schema $schema): void
     {
         $schema->dropTable('bl_strain_resistance');
@@ -74,6 +91,12 @@ final class Version20261017210000 extends AbstractMigration
         }
     }
 
+    /**
+     * Adds the columns specific to an organism.
+     *
+     * @param Table $table Table being built
+     * @return void
+     */
     private function organismColumns(Table $table): void
     {
         $table->addColumn('tax_id', Types::INTEGER, ['notnull' => false]);
@@ -81,6 +104,12 @@ final class Version20261017210000 extends AbstractMigration
         $table->addColumn('mitochondrial_genetic_code', Types::INTEGER, ['notnull' => false]);
     }
 
+    /**
+     * Adds the columns specific to a strain.
+     *
+     * @param Table $table Table being built
+     * @return void
+     */
     private function strainColumns(Table $table): void
     {
         $table->addColumn('strain_usage', Types::STRING, ['length' => 20, 'notnull' => false]);
@@ -88,18 +117,36 @@ final class Version20261017210000 extends AbstractMigration
         $table->addColumn('is_de3', Types::BOOLEAN);
     }
 
+    /**
+     * Adds the columns specific to a selection marker.
+     *
+     * @param Table $table Table being built
+     * @return void
+     */
     private function markerColumns(Table $table): void
     {
         $table->addColumn('working_concentration_ug_ml', Types::FLOAT, ['notnull' => false]);
         $table->addColumn('stock_concentration_mg_ml', Types::FLOAT, ['notnull' => false]);
     }
 
+    /**
+     * Adds the columns specific to a tag.
+     *
+     * @param Table $table Table being built
+     * @return void
+     */
     private function tagColumns(Table $table): void
     {
         $table->addColumn('purpose', Types::STRING, ['length' => 20]);
         $table->addColumn('dna_sequence', Types::STRING, ['length' => 500, 'notnull' => false]);
     }
 
+    /**
+     * Adds the audit columns, their indexes and their foreign keys to the user table.
+     *
+     * @param Table $table Table being built
+     * @return void
+     */
     private function auditColumns(Table $table): void
     {
         $name = $table->getName();
@@ -116,7 +163,10 @@ final class Version20261017210000 extends AbstractMigration
     /**
      * Name Doctrine gives to an index or foreign key: prefix + CRC32 of the table and column names.
      *
-     * @param list<string> $columns
+     * @param string $prefix IDX or FK
+     * @param string $table Table name
+     * @param list<string> $columns Column names
+     * @return string The identifier (30 characters at most)
      */
     private function identifier(string $prefix, string $table, array $columns): string
     {

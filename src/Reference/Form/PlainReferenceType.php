@@ -23,6 +23,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class PlainReferenceType extends AbstractType
 {
+    /**
+     * Builds the name and notes fields, shared by every reference form.
+     *
+     * @param FormBuilderInterface $builder Form builder
+     * @param array<string, mixed> $options Form options
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -30,6 +37,12 @@ class PlainReferenceType extends AbstractType
             ->add('notes', TextareaType::class, ['label' => 'reference.field.notes', 'required' => false, 'attr' => ['rows' => 3]]);
     }
 
+    /**
+     * Binds the form to its entity class.
+     *
+     * @param OptionsResolver $resolver Resolver of the form options
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => AbstractReference::class]);

@@ -18,6 +18,11 @@ use PHPUnit\Framework\TestCase;
  */
 final class UserTest extends TestCase
 {
+    /**
+     * Tests that the email is lowercased and trimmed, and is the login identifier.
+     *
+     * @return void
+     */
     public function testEmailIsNormalisedAndUsedAsIdentifier(): void
     {
         $user = new User('  Marie.Test@Example.ORG ', ' Marie Test ');
@@ -27,6 +32,11 @@ final class UserTest extends TestCase
         self::assertSame('Marie Test', $user->getDisplayName());
     }
 
+    /**
+     * Tests that ROLE_MEMBER is always present exactly once, whatever roles are assigned.
+     *
+     * @return void
+     */
     public function testMemberRoleIsAlwaysPresentWithoutDuplicates(): void
     {
         $user = new User('a@example.org', 'A');
@@ -36,6 +46,11 @@ final class UserTest extends TestCase
         self::assertSame([User::ROLE_ADMIN, User::ROLE_MEMBER], $user->getRoles());
     }
 
+    /**
+     * Tests that assigning a role outside the assignable roles throws an exception.
+     *
+     * @return void
+     */
     public function testUnknownRoleIsRejected(): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -43,6 +58,14 @@ final class UserTest extends TestCase
         (new User('a@example.org', 'A'))->setRoles(['ROLE_SUPERUSER']);
     }
 
+    /**
+     * Tests which combinations of active and system flags may sign in.
+     *
+     * @param bool $active Whether the account is enabled
+     * @param bool $system Whether it is a system account
+     * @param bool $expected Whether the person may sign in
+     * @return void
+     */
     #[DataProvider('loginMatrix')]
     public function testCanLogin(bool $active, bool $system, bool $expected): void
     {
@@ -52,7 +75,9 @@ final class UserTest extends TestCase
     }
 
     /**
-     * @return iterable<string, array{bool, bool, bool}>
+     * Data provider: every combination of the active and system flags.
+     *
+     * @return iterable<string, array{bool, bool, bool}> Active flag, system flag and expected result by case name
      */
     public static function loginMatrix(): iterable
     {
@@ -62,6 +87,11 @@ final class UserTest extends TestCase
         yield 'deactivated system' => [false, true, false];
     }
 
+    /**
+     * Tests that the serialized user (session) holds a fingerprint of the hash, never the hash itself.
+     *
+     * @return void
+     */
     public function testSerializationNeverContainsThePasswordHash(): void
     {
         $hash = '$2y$13$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ012345';

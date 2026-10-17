@@ -19,6 +19,12 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
  */
 final class SecurityController extends AbstractController
 {
+    /**
+     * Login page; an already signed-in person is sent to the home page.
+     *
+     * @param AuthenticationUtils $authenticationUtils Gives the last typed email and the last error
+     * @return Response The login form or a redirection to the home page
+     */
     #[Route('/login', name: 'app_login', methods: ['GET', 'POST'])]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -32,6 +38,12 @@ final class SecurityController extends AbstractController
         ]);
     }
 
+    /**
+     * Logout route, handled by the firewall (the method itself is never executed).
+     *
+     * @return never
+     * @throws \LogicException Always: the request is intercepted by the firewall
+     */
     #[Route('/logout', name: 'app_logout', methods: ['GET'])]
     public function logout(): never
     {

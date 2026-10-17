@@ -12,6 +12,9 @@ namespace App\Reference\Service;
 use App\Reference\Entity\AbstractReference;
 use App\Reference\Entity\Organism;
 use App\Reference\Entity\SelectionMarker;
+use App\Target\Entity\Gene;
+use App\Target\Entity\Product;
+use App\Target\Service\TargetChecks;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -23,16 +26,26 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 final class ReferenceWarnings
 {
+    /**
+     * ReferenceWarnings constructor.
+     *
+     * @param EntityManagerInterface $em Entity manager used to look for near-duplicates
+     * @param ReferenceUsage $usage Counts the objects that use an entry
+     * @param TargetChecks $targetChecks Biological checks on genes and products
+     */
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly ReferenceUsage $usage,
+        private readonly TargetChecks $targetChecks,
     ) {
     }
 
     /**
-     * @param array<string, scalar|null> $before significantValues() of the entry before the edition
+     * Non-blocking warnings on an entry that was just saved.
      *
-     * @return list<array{key: string, params: array<string, scalar>}>
+     * @param AbstractReference $entry Saved entry
+     * @param array<string, scalar|null> $before significantValues() of the entry before the edition, empty for a creation
+     * @return list<array{key: string, params: array<string, scalar>}> Translation key and parameters of each warning
      */
     public function for(AbstractReference $entry, array $before = []): array
     {
@@ -58,6 +71,13 @@ final class ReferenceWarnings
             }
         }
 
+        if ($entry instanceof Gene) {
+            array_push($warnings, ...$this->targetChecks->forGene($entry));
+        }
+        if ($entry instanceof Product) {
+            array_push($warnings, ...$this->targetChecks->forProduct($entry));
+        }
+
         if ([] !== $before && $before !== $entry->significantValues() && ($uses = $this->usage->count($entry)) > 0) {
             $warnings[] = ['key' => 'reference.warning.used_entry_changed', 'params' => ['%count%' => $uses]];
         }
@@ -66,7 +86,10 @@ final class ReferenceWarnings
     }
 
     /**
-     * @return list<string> names of the other entries that differ only by punctuation or spaces
+     * Other entries of the same list that differ only by punctuation or spaces.
+     *
+     * @param AbstractReference $entry Entry to compare
+     * @return list<string> Names of the near-duplicates
      */
     private function nearDuplicates(AbstractReference $entry): array
     {

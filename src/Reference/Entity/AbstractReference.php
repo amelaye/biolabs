@@ -52,16 +52,32 @@ abstract class AbstractReference implements AuditableInterface
     #[Assert\Length(max: 2000)]
     private ?string $notes = null;
 
+    /**
+     * Primary key.
+     *
+     * @return int|null The identifier, null until the entry is stored
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * Name of the entry as displayed (normalised: NFC, trimmed, single spaces).
+     *
+     * @return string The display name
+     */
     public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * Sets the name: the display form and the unique key (lowercase) are both derived from the text.
+     *
+     * @param string|null $name Name as typed
+     * @return static This entry
+     */
     public function setName(?string $name): static
     {
         $this->name = ReferenceName::display($name);
@@ -70,16 +86,31 @@ abstract class AbstractReference implements AuditableInterface
         return $this;
     }
 
+    /**
+     * Normalised lowercase key used for the uniqueness of the name.
+     *
+     * @return string The key, empty while no name is set
+     */
     public function getNameKey(): string
     {
         return $this->nameKey;
     }
 
+    /**
+     * Tells whether the entry is offered for new entries (not archived).
+     *
+     * @return bool True if the entry is active
+     */
     public function isActive(): bool
     {
         return $this->active;
     }
 
+    /**
+     * Archives the entry: it is no longer offered in the forms but stays visible on the objects that use it.
+     *
+     * @return static This entry
+     */
     public function archive(): static
     {
         $this->active = false;
@@ -87,6 +118,11 @@ abstract class AbstractReference implements AuditableInterface
         return $this;
     }
 
+    /**
+     * Restores an archived entry.
+     *
+     * @return static This entry
+     */
     public function restore(): static
     {
         $this->active = true;
@@ -94,11 +130,22 @@ abstract class AbstractReference implements AuditableInterface
         return $this;
     }
 
+    /**
+     * Free notes.
+     *
+     * @return string|null The notes, null if none
+     */
     public function getNotes(): ?string
     {
         return $this->notes;
     }
 
+    /**
+     * Sets the notes; an empty text is stored as null.
+     *
+     * @param string|null $notes Notes as typed
+     * @return static This entry
+     */
     public function setNotes(?string $notes): static
     {
         $notes = null === $notes ? null : trim($notes);
@@ -110,7 +157,7 @@ abstract class AbstractReference implements AuditableInterface
     /**
      * Values whose change alters the meaning of everything that uses the entry.
      *
-     * @return array<string, scalar|null>
+     * @return array<string, scalar|null> Value by field name
      */
     public function significantValues(): array
     {

@@ -28,6 +28,11 @@ abstract class DatabaseWebTestCase extends WebTestCase
     protected KernelBrowser $client;
     protected EntityManagerInterface $em;
 
+    /**
+     * Creates the client and a fresh SQLite schema (bl_ tables only) before each test, and clears the login throttling cache.
+     *
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->client = static::createClient();
@@ -46,7 +51,15 @@ abstract class DatabaseWebTestCase extends WebTestCase
     }
 
     /**
-     * @param list<string> $roles
+     * Creates and stores a synthetic account.
+     *
+     * @param string $email Email address
+     * @param string $name Display name
+     * @param string $password Plain password, hashed before storage
+     * @param list<string> $roles Roles to assign
+     * @param bool $active Whether the account is enabled
+     * @param bool $system Whether it is a non-login system account
+     * @return User The stored account
      */
     protected function createUser(
         string $email = 'marie.test@example.org',

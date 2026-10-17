@@ -3,7 +3,7 @@
 {% block title %}{{ ('reference.type.' ~ type)|trans }}{% endblock %}
 
 {% block body %}
-<h1>{{ 'reference.title'|trans }}</h1>
+<h1>{{ (group ~ '.title')|trans }}</h1>
 {% include 'reference/_tabs.html.twig' %}
 
 <section class="card">
@@ -23,7 +23,7 @@
             </select>
         </div>
         <button class="btn" type="submit">{{ 'reference.filter'|trans }}</button>
-        <a class="btn btn-primary" href="{{ path('app_reference_new', {type: type}) }}">{{ 'reference.new'|trans }}</a>
+        <a class="btn btn-primary" href="{{ path('app_' ~ group ~ '_new', {type: type}) }}">{{ 'reference.new'|trans }}</a>
     </form>
 
     {% if entries is empty %}
@@ -43,13 +43,13 @@
             <tbody>
             {% for entry in entries %}
                 <tr>
-                    <th scope="row">{{ entry.name }}</th>
+                    <th scope="row">{% if type == 'genes' %}<a href="{{ path('app_target_gene_show', {id: entry.id}) }}">{{ entry.name }}</a>{% elseif type == 'products' %}<a href="{{ path('app_target_product_show', {id: entry.id}) }}">{{ entry.name }}</a>{% else %}{{ entry.name }}{% endif %}</th>
                     <td>{% include 'reference/_details.html.twig' %}</td>
                     <td>{{ usages[entry.id] }}</td>
                     <td>{{ (entry.active ? 'reference.status.active' : 'reference.status.archived')|trans }}</td>
                     <td class="actions">
-                        <a href="{{ path('app_reference_edit', {type: type, id: entry.id}) }}">{{ 'reference.edit'|trans }}<span class="sr-only"> {{ entry.name }}</span></a>
-                        <form method="post" action="{{ path(entry.active ? 'app_reference_archive' : 'app_reference_restore', {type: type, id: entry.id}) }}">
+                        <a href="{{ path('app_' ~ group ~ '_edit', {type: type, id: entry.id}) }}">{{ 'reference.edit'|trans }}<span class="sr-only"> {{ entry.name }}</span></a>
+                        <form method="post" action="{{ path(entry.active ? 'app_' ~ group ~ '_archive' : 'app_' ~ group ~ '_restore', {type: type, id: entry.id}) }}">
                             <input type="hidden" name="_token" value="{{ csrf_token('reference_state_' ~ entry.id) }}">
                             <button class="btn btn-quiet" type="submit">{{ (entry.active ? 'reference.archive' : 'reference.restore')|trans }}<span class="sr-only"> {{ entry.name }}</span></button>
                         </form>

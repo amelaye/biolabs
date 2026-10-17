@@ -24,12 +24,22 @@ final class CreateUserCommandTest extends DatabaseWebTestCase
 {
     private const GOOD_PASSWORD = 'a-long-enough-password';
 
+    /**
+     * Removes the password environment variable set by a test.
+     *
+     * @return void
+     */
     protected function tearDown(): void
     {
         putenv('BIOLABS_USER_PASSWORD');
         parent::tearDown();
     }
 
+    /**
+     * Tests that a member is created with the password read from the environment when not interactive.
+     *
+     * @return void
+     */
     public function testCreatesAMemberWithPasswordFromEnvironmentInNonInteractiveMode(): void
     {
         putenv('BIOLABS_USER_PASSWORD='.self::GOOD_PASSWORD);
@@ -45,6 +55,11 @@ final class CreateUserCommandTest extends DatabaseWebTestCase
         self::assertStringNotContainsString(self::GOOD_PASSWORD, $user->getPassword(), 'The password is stored hashed.');
     }
 
+    /**
+     * Tests that the interactive mode asks for a confirmation and refuses two different entries.
+     *
+     * @return void
+     */
     public function testInteractiveModeAsksTwiceAndRejectsMismatch(): void
     {
         $tester = $this->runCommand(['email' => 'a@example.org', 'display-name' => 'A'], ['interactive' => true], [self::GOOD_PASSWORD, 'autre-saisie-differente']);
@@ -53,6 +68,11 @@ final class CreateUserCommandTest extends DatabaseWebTestCase
         self::assertNull($this->users()->findOneByEmail('a@example.org'));
     }
 
+    /**
+     * Tests that the interactive mode creates the account when both entries match.
+     *
+     * @return void
+     */
     public function testInteractiveModeCreatesAccount(): void
     {
         $tester = $this->runCommand(['email' => 'b@example.org', 'display-name' => 'B', '--role' => User::ROLE_ADMIN], ['interactive' => true], [self::GOOD_PASSWORD, self::GOOD_PASSWORD]);
@@ -61,6 +81,11 @@ final class CreateUserCommandTest extends DatabaseWebTestCase
         self::assertContains(User::ROLE_ADMIN, $this->users()->findOneByEmail('b@example.org')->getRoles());
     }
 
+    /**
+     * Tests that a password shorter than the minimum is refused and no account is created.
+     *
+     * @return void
+     */
     public function testRefusesShortPassword(): void
     {
         putenv('BIOLABS_USER_PASSWORD=court');
@@ -71,6 +96,11 @@ final class CreateUserCommandTest extends DatabaseWebTestCase
         self::assertNull($this->users()->findOneByEmail('c@example.org'));
     }
 
+    /**
+     * Tests that the non-interactive mode fails when the password variable is not defined.
+     *
+     * @return void
+     */
     public function testNonInteractiveWithoutEnvironmentVariableFails(): void
     {
         $tester = $this->runCommand(['email' => 'd@example.org', 'display-name' => 'D'], ['interactive' => false]);
@@ -79,6 +109,11 @@ final class CreateUserCommandTest extends DatabaseWebTestCase
         self::assertStringContainsString('BIOLABS_USER_PASSWORD', $tester->getDisplay());
     }
 
+    /**
+     * Tests that an unknown role is refused.
+     *
+     * @return void
+     */
     public function testRefusesUnknownRole(): void
     {
         $tester = $this->runCommand(['email' => 'e@example.org', 'display-name' => 'E', '--role' => 'ROLE_ROOT'], ['interactive' => false]);
@@ -86,6 +121,11 @@ final class CreateUserCommandTest extends DatabaseWebTestCase
         self::assertSame(Command::INVALID, $tester->getStatusCode());
     }
 
+    /**
+     * Tests that an email already used is refused, whatever its case.
+     *
+     * @return void
+     */
     public function testRefusesDuplicateEmailIgnoringCase(): void
     {
         $this->createUser('f@example.org');
@@ -96,6 +136,11 @@ final class CreateUserCommandTest extends DatabaseWebTestCase
         self::assertSame(Command::FAILURE, $tester->getStatusCode());
     }
 
+    /**
+     * Tests that an invalid email address is refused.
+     *
+     * @return void
+     */
     public function testRefusesInvalidEmail(): void
     {
         putenv('BIOLABS_USER_PASSWORD='.self::GOOD_PASSWORD);
@@ -105,6 +150,11 @@ final class CreateUserCommandTest extends DatabaseWebTestCase
         self::assertSame(Command::INVALID, $tester->getStatusCode());
     }
 
+    /**
+     * Tests that a system account is created without password and cannot sign in.
+     *
+     * @return void
+     */
     public function testSystemAccountHasNoPasswordAndCannotLogIn(): void
     {
         $tester = $this->runCommand(['email' => 'import@example.org', 'display-name' => 'Import Plasmi::db', '--system' => true], ['interactive' => false]);
@@ -117,9 +167,12 @@ final class CreateUserCommandTest extends DatabaseWebTestCase
     }
 
     /**
-     * @param array<string, mixed> $input
-     * @param array<string, mixed> $options
-     * @param list<string>         $answers
+     * Runs the command with synthetic arguments.
+     *
+     * @param array<string, string> $input Arguments of the command
+     * @param array<string, mixed> $options Options of the command
+     * @param list<string> $answers Answers given to the interactive questions
+     * @return CommandTester The tester, to read the status and the display
      */
     private function runCommand(array $input, array $options, array $answers = []): CommandTester
     {
@@ -133,6 +186,11 @@ final class CreateUserCommandTest extends DatabaseWebTestCase
         return $tester;
     }
 
+    /**
+     * Repository of the accounts.
+     *
+     * @return UserRepository The repository
+     */
     private function users(): UserRepository
     {
         return static::getContainer()->get(UserRepository::class);

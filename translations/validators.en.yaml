@@ -13,3 +13,14 @@ tag:
 supplier:
     url:
         invalid: "Invalid address: only http and https are accepted."
+gene:
+    cds:
+        empty: "The coding sequence is required."
+        invalid_symbol: "The sequence contains a symbol that is not an IUPAC nucleotide code."
+        not_in_frame: "The length ({{ length }} nt) is not a multiple of 3."
+product:
+    window:
+        both_or_none: "Fill in both the start and the end, or neither."
+        start_after_end: "The start must be less than or equal to the end."
+        beyond_cds: "The end is beyond the length of the CDS ({{ length }} nt)."
+        out_of_frame: "For a protein, the window must start at the first nucleotide of a codon and span a whole number of codons."

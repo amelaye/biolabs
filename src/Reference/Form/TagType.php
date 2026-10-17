@@ -21,6 +21,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class TagType extends PlainReferenceType
 {
+    /**
+     * Adds the purpose and the optional DNA sequence to the common fields.
+     *
+     * @param FormBuilderInterface $builder Form builder
+     * @param array<string, mixed> $options Form options
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildForm($builder, $options);
@@ -34,6 +41,12 @@ final class TagType extends PlainReferenceType
             ->add('dnaSequence', TextareaType::class, ['label' => 'reference.field.dna_sequence', 'required' => false, 'help' => 'reference.help.dna_sequence', 'attr' => ['rows' => 2, 'spellcheck' => 'false', 'autocomplete' => 'off']]);
     }
 
+    /**
+     * Binds the form to its entity class.
+     *
+     * @param OptionsResolver $resolver Resolver of the form options
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => Tag::class]);

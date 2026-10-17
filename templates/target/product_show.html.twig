@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block body %}
+<h1>{{ 'target.title'|trans }}</h1>
+{% include 'reference/_tabs.html.twig' %}
+
+<section class="card">
+    <h2>{{ product.name }}{% if not product.active %} <small class="muted">({{ 'reference.status.archived'|trans }})</small>{% endif %}</h2>
+    <dl class="facts">
+        <dt>{{ 'target.field.product_type'|trans }}</dt><dd>{{ ('target.product_type.' ~ product.type.value)|trans }}</dd>
+        <dt>{{ 'target.field.gene'|trans }}</dt><dd><a href="{{ path('app_target_gene_show', {id: product.gene.id}) }}">{{ product.gene.name }}</a> ({{ product.gene.organism.name }})</dd>
+        <dt>{{ 'target.window'|trans }}</dt>
+        <dd>{% if product.startNt is not null %}{{ product.startNt }}–{{ product.endNt }} nt{% else %}{{ 'target.whole_cds'|trans }}{% endif %}</dd>
+        {% if result %}
+            <dt>{{ 'target.length'|trans }}</dt><dd>{{ result.dna|length }} nt{% if result.protein is not null %} · {{ result.protein|replace({'*': ''})|length }} aa{% endif %}</dd>
+            {% if result.mass %}
+                <dt>{{ 'target.mass'|trans }}</dt><dd>{% if result.mass.min == result.mass.max %}{{ result.mass.max|number_format(1, '.', ' ') }}{% else %}{{ result.mass.min|number_format(1, '.', ' ') }} – {{ result.mass.max|number_format(1, '.', ' ') }}{% endif %} {{ result.unit }}</dd>
+            {% endif %}
+        {% endif %}
+    </dl>
+    {% if product.notes %}<p>{{ product.notes }}</p>{% endif %}
+
+    {% if result %}
+        <h3>DNA</h3>
+        <pre class="sequence" tabindex="0">{{ result.dna|split('', 10)|join(' ') }}</pre>
+        {% if result.rna is not null %}
+            <h3>RNA</h3>
+            <pre class="sequence" tabindex="0">{{ result.rna|split('', 10)|join(' ') }}</pre>
+        {% endif %}
+        {% if result.protein is not null %}
+            <h3>{{ 'target.translation'|trans }}</h3>
+            <pre class="sequence" tabindex="0">{{ result.protein|split('', 10)|join(' ') }}</pre>
+        {% endif %}
+    {% else %}
+        <div class="notice notice-warning" role="status">{{ 'target.no_sequence'|trans }}</div>
+    {% endif %}
+    <p>
+        <a class="btn" href="{{ path('app_target_edit', {type: 'products', id: product.id}) }}">{{ 'reference.edit'|trans }}</a>
+        <a class="btn" href="{{ path('app_target_index', {type: 'products'}) }}">{{ 'reference.back'|trans }}</a>
+    </p>
+</section>
+{% endblock %}

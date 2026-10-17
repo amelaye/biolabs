@@ -39,11 +39,22 @@ class SelectionMarker extends AbstractReference
     #[Assert\Positive]
     private ?float $stockConcentrationMgMl = null;
 
+    /**
+     * Working concentration.
+     *
+     * @return float|null The concentration in µg/mL, null if not provided
+     */
     public function getWorkingConcentrationUgMl(): ?float
     {
         return $this->workingConcentrationUgMl;
     }
 
+    /**
+     * Sets the working concentration.
+     *
+     * @param float|null $value Concentration in µg/mL (positive), null if not provided
+     * @return static This entity
+     */
     public function setWorkingConcentrationUgMl(?float $value): static
     {
         $this->workingConcentrationUgMl = $value;
@@ -51,11 +62,22 @@ class SelectionMarker extends AbstractReference
         return $this;
     }
 
+    /**
+     * Concentration of the stock solution.
+     *
+     * @return float|null The concentration in mg/mL, null if not provided
+     */
     public function getStockConcentrationMgMl(): ?float
     {
         return $this->stockConcentrationMgMl;
     }
 
+    /**
+     * Sets the concentration of the stock solution.
+     *
+     * @param float|null $value Concentration in mg/mL (positive), null if not provided
+     * @return static This entity
+     */
     public function setStockConcentrationMgMl(?float $value): static
     {
         $this->stockConcentrationMgMl = $value;
@@ -63,6 +85,11 @@ class SelectionMarker extends AbstractReference
         return $this;
     }
 
+    /**
+     * Name and concentrations: changing them alters the meaning of what uses the marker.
+     *
+     * @return array<string, scalar|null> Value by field name
+     */
     public function significantValues(): array
     {
         return parent::significantValues() + [

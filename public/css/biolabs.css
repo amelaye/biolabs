@@ -113,3 +113,10 @@ table.data td.actions form { margin: 0; }
 .card-form { max-width: 40rem; }
 .notice-warning { background: var(--info-soft); border-color: var(--accent); }
 .notice-success { background: var(--accent-soft); border-color: var(--accent); }
+
+/* Targets (LAB-2) */
+pre.sequence { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .9rem; white-space: pre-wrap; word-break: break-all; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: .75rem; }
+.ref-form textarea.sequence { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+dl.facts { display: grid; grid-template-columns: max-content 1fr; gap: .25rem 1rem; }
+dl.facts dt { color: var(--muted); }
+dl.facts dd { margin: 0; }

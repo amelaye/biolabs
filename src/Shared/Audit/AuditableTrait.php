@@ -36,26 +36,54 @@ trait AuditableTrait
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?User $updatedBy = null;
 
+    /**
+     * Date and time the entity was created.
+     *
+     * @return \DateTimeImmutable|null The creation timestamp, null until the first flush
+     */
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
+    /**
+     * Person who created the entity.
+     *
+     * @return User|null The author, null when the write did not come from a signed-in person
+     */
     public function getCreatedBy(): ?User
     {
         return $this->createdBy;
     }
 
+    /**
+     * Date and time of the last modification.
+     *
+     * @return \DateTimeImmutable|null The last update timestamp, null until the first flush
+     */
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
+    /**
+     * Person who made the last modification.
+     *
+     * @return User|null The author of the last update, null when it did not come from a signed-in person
+     */
     public function getUpdatedBy(): ?User
     {
         return $this->updatedBy;
     }
 
+    /**
+     * Records the creation of the entity: the creation date and author never change afterwards,
+     * and the update date and author start with the same values.
+     *
+     * @param \DateTimeImmutable $at Moment of the creation
+     * @param User|null $by Signed-in person, null for a console command or an import
+     * @return void
+     */
     public function recordCreation(\DateTimeImmutable $at, ?User $by): void
     {
         if (null !== $this->createdAt) {
@@ -68,6 +96,13 @@ trait AuditableTrait
         $this->updatedBy = $by;
     }
 
+    /**
+     * Records a modification of the entity (date and author of the last update).
+     *
+     * @param \DateTimeImmutable $at Moment of the modification
+     * @param User|null $by Signed-in person, null for a console command or an import
+     * @return void
+     */
     public function recordUpdate(\DateTimeImmutable $at, ?User $by): void
     {
         $this->updatedAt = $at;

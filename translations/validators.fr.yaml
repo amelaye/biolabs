@@ -13,3 +13,14 @@ tag:
 supplier:
     url:
         invalid: "Adresse invalide : seuls les schémas http et https sont acceptés."
+gene:
+    cds:
+        empty: "La séquence codante est obligatoire."
+        invalid_symbol: "La séquence contient un symbole qui n'est pas un code nucléotidique IUPAC."
+        not_in_frame: "La longueur ({{ length }} nt) n'est pas un multiple de 3."
+product:
+    window:
+        both_or_none: "Renseignez le début et la fin, ou aucun des deux."
+        start_after_end: "Le début doit être inférieur ou égal à la fin."
+        beyond_cds: "La fin dépasse la longueur du CDS ({{ length }} nt)."
+        out_of_frame: "Pour une protéine, la fenêtre doit commencer au premier nucléotide d'un codon et couvrir un nombre entier de codons."

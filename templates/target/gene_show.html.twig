@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ gene.name }}{% endblock %}
+
+{% block body %}
+<h1>{{ 'target.title'|trans }}</h1>
+{% include 'reference/_tabs.html.twig' %}
+
+<section class="card">
+    <h2>{{ gene.name }}{% if not gene.active %} <small class="muted">({{ 'reference.status.archived'|trans }})</small>{% endif %}</h2>
+    <dl class="facts">
+        <dt>{{ 'target.field.organism'|trans }}</dt><dd>{{ gene.organism.name }} · {{ 'reference.field.genetic_code'|trans }} {{ gene.organism.geneticCode }}</dd>
+        {% if gene.productName %}<dt>{{ 'target.field.product_name'|trans }}</dt><dd>{{ gene.productName }}</dd>{% endif %}
+        {% if gene.sourceDatabase %}<dt>{{ 'target.field.source_database'|trans }}</dt><dd>{{ ('target.source_database.' ~ gene.sourceDatabase.value)|trans }}</dd>{% endif %}
+        {% if gene.sourceDefinition %}<dt>{{ 'target.field.source_definition'|trans }}</dt><dd>{{ gene.sourceDefinition }}</dd>{% endif %}
+        <dt>{{ 'target.cds_length'|trans }}</dt><dd>{{ gene.cdsLength }} nt</dd>
+        {% if protein is not null %}
+            <dt>{{ 'target.protein_length'|trans }}</dt><dd>{{ protein|replace({'*': ''})|length }} aa</dd>
+        {% endif %}
+        {% if mass %}
+            <dt>{{ 'target.mass'|trans }}</dt><dd>{% if mass.min == mass.max %}{{ mass.max|number_format(1, '.', ' ') }}{% else %}{{ mass.min|number_format(1, '.', ' ') }} – {{ mass.max|number_format(1, '.', ' ') }}{% endif %} Da</dd>
+        {% endif %}
+    </dl>
+    {% if gene.notes %}<p>{{ gene.notes }}</p>{% endif %}
+
+    <h3>{{ 'target.field.cds'|trans }}</h3>
+    <pre class="sequence" tabindex="0">{{ gene.cdsSequence|split('', 10)|join(' ') }}</pre>
+    {% if protein is not null %}
+        <h3>{{ 'target.translation'|trans }}</h3>
+        <pre class="sequence" tabindex="0">{{ protein|split('', 10)|join(' ') }}</pre>
+    {% endif %}
+
+    <h3>{{ 'reference.type.products'|trans }}</h3>
+    {% if products is empty %}
+        <p class="muted">{{ 'reference.empty'|trans }}</p>
+    {% else %}
+        <ul>
+        {% for product in products %}
+            <li><a href="{{ path('app_target_product_show', {id: product.id}) }}">{{ product.name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    <p>
+        <a class="btn" href="{{ path('app_target_edit', {type: 'genes', id: gene.id}) }}">{{ 'reference.edit'|trans }}</a>
+        <a class="btn" href="{{ path('app_target_index', {type: 'genes'}) }}">{{ 'reference.back'|trans }}</a>
+    </p>
+</section>
+{% endblock %}
