@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ (is_new ? 'reference.new' : 'reference.edit')|trans }} · {{ ('reference.type.' ~ type)|trans }}{% endblock %}
+
+{% block body %}
+<h1>{{ 'reference.title'|trans }}</h1>
+{% include 'reference/_tabs.html.twig' %}
+
+<section class="card card-form">
+    <h2>{{ (is_new ? 'reference.new' : 'reference.edit')|trans }} — {{ ('reference.type.' ~ type)|trans }}</h2>
+
+    {% if not is_new and not entry.active %}
+        <div class="notice notice-warning" role="status">{{ 'reference.archived_notice'|trans }}</div>
+    {% endif %}
+    {% if usage > 0 %}
+        <div class="notice notice-warning" role="status">{{ 'reference.used_notice'|trans({'%count%': usage}) }}</div>
+    {% endif %}
+
+    {{ form_start(form, {attr: {novalidate: 'novalidate', class: 'ref-form'}}) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-primary" type="submit">{{ 'reference.save'|trans }}</button>
+        <a class="btn" href="{{ path('app_reference_index', {type: type}) }}">{{ 'reference.cancel'|trans }}</a>
+    {{ form_end(form) }}
+</section>
+{% endblock %}

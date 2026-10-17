@@ -92,3 +92,24 @@ h1 { margin-top: 0; font-size: 1.6rem; line-height: 1.25; }
 @media (max-width: 40rem) {
     .header-tools { margin-left: 0; width: 100%; }
 }
+
+/* Reference lists (LAB-1) */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.tabs ul { list-style: none; margin: 0 0 1rem; padding: 0; display: flex; flex-wrap: wrap; gap: .25rem 1rem; border-bottom: 1px solid var(--border); }
+.tabs a { display: inline-block; padding: .4rem .2rem; text-decoration: none; color: var(--text); border-bottom: 3px solid transparent; }
+.tabs a[aria-current="page"], .tabs a:hover { border-bottom-color: var(--accent); }
+.filters { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: flex-end; margin-bottom: 1rem; }
+.filters .field { margin-bottom: 0; }
+table.data { width: 100%; border-collapse: collapse; }
+table.data th, table.data td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+table.data thead th { font-size: .85rem; color: var(--muted); }
+table.data td.actions { display: flex; gap: .75rem; align-items: center; }
+table.data td.actions form { margin: 0; }
+.ref-form > div { margin-bottom: 1rem; }
+.ref-form label { display: block; margin-bottom: .25rem; font-weight: 600; }
+.ref-form input[type="text"], .ref-form input[type="url"], .ref-form input[type="number"], .ref-form select, .ref-form textarea, .filters input, .filters select { width: 100%; padding: .55rem .7rem; font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.ref-form .help-text, .ref-form ul { color: var(--muted); font-size: .9rem; }
+.ref-form ul { color: var(--danger); list-style: none; padding: 0; margin: .25rem 0 0; }
+.card-form { max-width: 40rem; }
+.notice-warning { background: var(--info-soft); border-color: var(--accent); }
+.notice-success { background: var(--accent-soft); border-color: var(--accent); }

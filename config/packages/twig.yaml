@@ -7,6 +7,7 @@ twig:
         #   route: route name; label: translation key; role: minimum required role
         bl_nav:
             - { route: 'app_home', label: 'nav.home', role: 'ROLE_MEMBER' }
+            - { route: 'app_reference_home', label: 'nav.references', role: 'ROLE_MEMBER' }
 
 when@test:
     twig:

@@ -7,6 +7,7 @@ nav:
     main: Navigation principale
     language: Langue
     home: Accueil
+    references: Référentiels
 role:
     member: Membre
     admin: Administrateur
@@ -24,3 +25,75 @@ home:
     welcome: "Bonjour %name%"
     intro: Bienvenue dans biolabs, le suivi des constructions, échantillons et productions du laboratoire.
     no_modules: Les modules (référentiels, clonage, échantillons, production) seront ajoutés lot par lot.
+reference:
+    title: Référentiels
+    tabs: Listes de référence
+    type:
+        organisms: Organismes
+        strains: Souches
+        markers: Marqueurs de sélection
+        promoters: Promoteurs
+        origins: Origines de réplication
+        tags: Tags
+        suppliers: Fournisseurs
+    field:
+        name: Nom
+        notes: Notes
+        tax_id: Taxid NCBI
+        genetic_code: Table génétique NCBI
+        mitochondrial_genetic_code: Table génétique mitochondriale NCBI
+        usage: Usage
+        genotype: Génotype
+        de3: Lysogène DE3
+        resistances: Résistances
+        working_concentration: Concentration de travail (µg/mL)
+        stock_concentration: Concentration de la solution mère (mg/mL)
+        purpose: Finalité
+        dna_sequence: Séquence ADN (5′→3′)
+        url: Site web (http ou https)
+    help:
+        dna_sequence: "Facultatif. A, C, G, T uniquement ; espaces et casse ignorés."
+    placeholder:
+        choose: "— Choisir —"
+        unspecified: "— Non renseigné —"
+    strain_usage:
+        cloning: Clonage
+        expression: Expression
+        both: Clonage et expression
+    tag_purpose:
+        purification: Purification
+        detection: Détection
+    status:
+        label: Statut
+        active: Actif
+        archived: Archivé
+        all: Tous
+    search: Rechercher
+    filter: Filtrer
+    new: Nouvelle entrée
+    edit: Modifier
+    archive: Archiver
+    restore: Restaurer
+    save: Enregistrer
+    cancel: Annuler
+    details: Détails
+    usages: Utilisations
+    actions: Actions
+    stock: solution mère
+    empty: Aucune entrée.
+    archived_notice: Cette entrée est archivée ; elle n'est plus proposée à la saisie mais reste visible sur les objets existants.
+    used_notice: "Cette entrée est utilisée %count% fois : renommer ou changer une valeur modifie le sens de ces objets."
+    name:
+        already_used: "« %name% » existe déjà."
+        already_used_archived: "« %name% » existe déjà mais est archivée : restaurez-la plutôt que d'en créer un doublon."
+    flash:
+        created: "« %name% » a été créé."
+        updated: "« %name% » a été modifié."
+        archived: "« %name% » a été archivé."
+        restored: "« %name% » a été restauré."
+    warning:
+        none_like: "Ce nom ressemble à une valeur « aucun » : laissez plutôt le champ vide sur l'objet qui l'utilise."
+        near_duplicate: "Ce nom ne diffère de « %name% » que par la ponctuation ou les espaces : vérifiez qu'il ne s'agit pas d'un doublon."
+        taxid_missing: Taxid NCBI non renseigné.
+        concentration_range: "Concentration de travail hors de la plage indicative %low%–%high% µg/mL (plage non sourcée) : à vérifier."
+        used_entry_changed: "Cette entrée est utilisée %count% fois : sa modification change le sens de ces objets."

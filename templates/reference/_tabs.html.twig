@@ -1,0 +1,7 @@
+<nav class="tabs" aria-label="{{ 'reference.tabs'|trans }}">
+    <ul>
+        {% for slug in types %}
+            <li><a href="{{ path('app_reference_index', {type: slug}) }}"{% if slug == type %} aria-current="page"{% endif %}>{{ ('reference.type.' ~ slug)|trans }}</a></li>
+        {% endfor %}
+    </ul>
+</nav>

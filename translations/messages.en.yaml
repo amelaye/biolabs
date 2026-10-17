@@ -7,6 +7,7 @@ nav:
     main: Main navigation
     language: Language
     home: Home
+    references: Reference data
 role:
     member: Member
     admin: Administrator
@@ -24,3 +25,75 @@ home:
     welcome: "Hello %name%"
     intro: Welcome to biolabs, the tracking of the laboratory's constructs, samples and productions.
     no_modules: Modules (reference data, cloning, samples, production) will be added batch by batch.
+reference:
+    title: Reference data
+    tabs: Reference lists
+    type:
+        organisms: Organisms
+        strains: Strains
+        markers: Selection markers
+        promoters: Promoters
+        origins: Origins of replication
+        tags: Tags
+        suppliers: Suppliers
+    field:
+        name: Name
+        notes: Notes
+        tax_id: NCBI taxid
+        genetic_code: NCBI genetic code table
+        mitochondrial_genetic_code: NCBI mitochondrial genetic code table
+        usage: Use
+        genotype: Genotype
+        de3: DE3 lysogen
+        resistances: Resistances
+        working_concentration: Working concentration (µg/mL)
+        stock_concentration: Stock solution concentration (mg/mL)
+        purpose: Purpose
+        dna_sequence: DNA sequence (5′→3′)
+        url: Website (http or https)
+    help:
+        dna_sequence: "Optional. A, C, G, T only; spaces and case are ignored."
+    placeholder:
+        choose: "— Choose —"
+        unspecified: "— Not specified —"
+    strain_usage:
+        cloning: Cloning
+        expression: Expression
+        both: Cloning and expression
+    tag_purpose:
+        purification: Purification
+        detection: Detection
+    status:
+        label: Status
+        active: Active
+        archived: Archived
+        all: All
+    search: Search
+    filter: Filter
+    new: New entry
+    edit: Edit
+    archive: Archive
+    restore: Restore
+    save: Save
+    cancel: Cancel
+    details: Details
+    usages: Uses
+    actions: Actions
+    stock: stock
+    empty: No entry.
+    archived_notice: This entry is archived; it is no longer offered for new entries but stays visible on existing objects.
+    used_notice: "This entry is used %count% times: renaming it or changing a value changes the meaning of those objects."
+    name:
+        already_used: "\"%name%\" already exists."
+        already_used_archived: "\"%name%\" already exists but is archived: restore it instead of creating a duplicate."
+    flash:
+        created: "\"%name%\" was created."
+        updated: "\"%name%\" was updated."
+        archived: "\"%name%\" was archived."
+        restored: "\"%name%\" was restored."
+    warning:
+        none_like: "This name looks like a \"none\" value: leave the field empty on the object that uses it instead."
+        near_duplicate: "This name only differs from \"%name%\" by punctuation or spaces: check it is not a duplicate."
+        taxid_missing: NCBI taxid not provided.
+        concentration_range: "Working concentration outside the indicative range %low%–%high% µg/mL (unsourced range): please check."
+        used_entry_changed: "This entry is used %count% times: changing it alters the meaning of those objects."

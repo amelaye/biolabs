@@ -1,0 +1,15 @@
+reference:
+    name:
+        already_used: "« {{ name }} » existe déjà."
+        already_used_archived: "« {{ name }} » existe déjà mais est archivée : restaurez-la plutôt que d'en créer un doublon."
+organism:
+    genetic_code:
+        invalid: "Table génétique NCBI inconnue ou non prise en charge (pas de table 0, 7, 8, 17-20, 27, 28 ni 31)."
+    mitochondrial_code:
+        invalid: "Cette table n'est pas une table génétique mitochondriale NCBI."
+tag:
+    dna_sequence:
+        invalid: "La séquence ne peut contenir que A, C, G et T."
+supplier:
+    url:
+        invalid: "Adresse invalide : seuls les schémas http et https sont acceptés."

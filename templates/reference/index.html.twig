@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ ('reference.type.' ~ type)|trans }}{% endblock %}
+
+{% block body %}
+<h1>{{ 'reference.title'|trans }}</h1>
+{% include 'reference/_tabs.html.twig' %}
+
+<section class="card">
+    <h2>{{ ('reference.type.' ~ type)|trans }}</h2>
+
+    <form method="get" class="filters" role="search">
+        <div class="field">
+            <label for="q">{{ 'reference.search'|trans }}</label>
+            <input type="search" id="q" name="q" value="{{ q }}" maxlength="100">
+        </div>
+        <div class="field">
+            <label for="status">{{ 'reference.status.label'|trans }}</label>
+            <select id="status" name="status">
+                {% for value in ['active', 'archived', 'all'] %}
+                    <option value="{{ value }}"{% if value == status %} selected{% endif %}>{{ ('reference.status.' ~ value)|trans }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button class="btn" type="submit">{{ 'reference.filter'|trans }}</button>
+        <a class="btn btn-primary" href="{{ path('app_reference_new', {type: type}) }}">{{ 'reference.new'|trans }}</a>
+    </form>
+
+    {% if entries is empty %}
+        <p class="muted">{{ 'reference.empty'|trans }}</p>
+    {% else %}
+        <table class="data">
+            <caption class="sr-only">{{ ('reference.type.' ~ type)|trans }}</caption>
+            <thead>
+                <tr>
+                    <th scope="col">{{ 'reference.field.name'|trans }}</th>
+                    <th scope="col">{{ 'reference.details'|trans }}</th>
+                    <th scope="col">{{ 'reference.usages'|trans }}</th>
+                    <th scope="col">{{ 'reference.status.label'|trans }}</th>
+                    <th scope="col"><span class="sr-only">{{ 'reference.actions'|trans }}</span></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for entry in entries %}
+                <tr>
+                    <th scope="row">{{ entry.name }}</th>
+                    <td>{% include 'reference/_details.html.twig' %}</td>
+                    <td>{{ usages[entry.id] }}</td>
+                    <td>{{ (entry.active ? 'reference.status.active' : 'reference.status.archived')|trans }}</td>
+                    <td class="actions">
+                        <a href="{{ path('app_reference_edit', {type: type, id: entry.id}) }}">{{ 'reference.edit'|trans }}<span class="sr-only"> {{ entry.name }}</span></a>
+                        <form method="post" action="{{ path(entry.active ? 'app_reference_archive' : 'app_reference_restore', {type: type, id: entry.id}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('reference_state_' ~ entry.id) }}">
+                            <button class="btn btn-quiet" type="submit">{{ (entry.active ? 'reference.archive' : 'reference.restore')|trans }}<span class="sr-only"> {{ entry.name }}</span></button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</section>
+{% endblock %}

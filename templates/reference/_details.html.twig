@@ -1,0 +1,11 @@
+{% if type == 'organisms' %}
+    {% if entry.taxId %}{{ 'reference.field.tax_id'|trans }} {{ entry.taxId }} · {% endif %}{{ 'reference.field.genetic_code'|trans }} {{ entry.geneticCode }}{% if entry.mitochondrialGeneticCode %} · {{ 'reference.field.mitochondrial_genetic_code'|trans }} {{ entry.mitochondrialGeneticCode }}{% endif %}
+{% elseif type == 'strains' %}
+    {% if entry.usage %}{{ ('reference.strain_usage.' ~ entry.usage.value)|trans }}{% endif %}{% if entry.de3 %} · DE3{% endif %}{% if entry.resistances|length %} · {{ entry.resistances|map(m => m.name)|join(', ') }}{% endif %}
+{% elseif type == 'markers' %}
+    {% if entry.workingConcentrationUgMl is not null %}{{ entry.workingConcentrationUgMl }} µg/mL{% endif %}{% if entry.stockConcentrationMgMl is not null %} · {{ 'reference.stock'|trans }} {{ entry.stockConcentrationMgMl }} mg/mL{% endif %}
+{% elseif type == 'tags' %}
+    {{ ('reference.tag_purpose.' ~ entry.purpose.value)|trans }}{% if entry.dnaSequence %} · {{ entry.dnaSequence|length }} nt{% endif %}
+{% elseif type == 'suppliers' %}
+    {% if entry.url and (entry.url starts with 'http://' or entry.url starts with 'https://') %}<a href="{{ entry.url }}" rel="noopener noreferrer" target="_blank">{{ entry.url }}</a>{% endif %}
+{% endif %}
