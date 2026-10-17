@@ -10,6 +10,8 @@ parameters:
     # languages offered by the selector; the first one is the fallback
     # and must stay aligned with framework.default_locale
     app.supported_locales: ['fr', 'en']
+    # attached files (vector maps): outside public/, never served directly
+    app.attachments_dir: '%kernel.project_dir%/var/attachments'
 
 services:
     # default configuration for services in *this* file
@@ -30,3 +32,9 @@ services:
         arguments:
             $defaultLocale: '%kernel.default_locale%'
             $supportedLocales: '%app.supported_locales%'
+
+when@test:
+    parameters:
+        # tests/bootstrap.php defines TEST_ATTACHMENTS_DIR per PHPUnit process (isolation)
+        env(TEST_ATTACHMENTS_DIR): '%kernel.project_dir%/var/attachments_test'
+        app.attachments_dir: '%env(TEST_ATTACHMENTS_DIR)%'

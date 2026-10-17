@@ -3,7 +3,7 @@
  * Base class of functional tests : fresh SQLite schema per test
  * Freely inspired by Plasmi::db 0.9.1 (Mark Brooks) and BioPHP's project biophp.org
  * Created 17 October 2026
- * Last modified 17 October 2026
+ * Last modified 18 October 2026
  */
 declare(strict_types=1);
 
@@ -48,6 +48,16 @@ abstract class DatabaseWebTestCase extends WebTestCase
 
         // Login throttling is persisted in the cache: start from scratch.
         static::getContainer()->get('cache.rate_limiter')->clear();
+    }
+
+    /**
+     * Directory where this PHPUnit process stores attachments (one per process, see tests/bootstrap.php).
+     *
+     * @return string The absolute path (it may not exist yet)
+     */
+    protected function attachmentsDir(): string
+    {
+        return (string) static::getContainer()->getParameter('app.attachments_dir');
     }
 
     /**

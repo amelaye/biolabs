@@ -9,6 +9,7 @@ twig:
             - { route: 'app_home', label: 'nav.home', role: 'ROLE_MEMBER' }
             - { route: 'app_reference_home', label: 'nav.references', role: 'ROLE_MEMBER' }
             - { route: 'app_target_home', label: 'nav.targets', role: 'ROLE_MEMBER' }
+            - { route: 'app_cloning_home', label: 'nav.cloning', role: 'ROLE_MEMBER' }
 
 when@test:
     twig:

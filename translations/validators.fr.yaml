@@ -24,3 +24,39 @@ product:
         start_after_end: "Le début doit être inférieur ou égal à la fin."
         beyond_cds: "La fin dépasse la longueur du CDS ({{ length }} nt)."
         out_of_frame: "Pour une protéine, la fenêtre doit commencer au premier nucléotide d'un codon et couvrir un nombre entier de codons."
+oligo:
+    sequence:
+        empty: "La séquence est obligatoire."
+        invalid_symbol: "La séquence contient un symbole qui n'est pas un code nucléotidique (A, C, G, T ou IUPAC)."
+        too_long: "La séquence dépasse {{ max }} nt."
+        locked: "La séquence ne peut pas être modifiée : {{ count }} PCR utilisent cet oligo."
+vector:
+    sequence:
+        invalid_symbol: "La séquence contient un symbole qui n'est pas un code nucléotidique (A, C, G, T ou IUPAC)."
+    tags:
+        listed_without_tag: "Choisissez au moins un tag, ou passez l'état à « Aucune » ou « Inconnue »."
+        tag_without_listed: "Un tag est choisi : passez l'état à « Liste »."
+pcr:
+    forward:
+        required: "L'oligo sens est obligatoire."
+    reverse:
+        required: "L'oligo antisens est obligatoire."
+    template:
+        exactly_one: "Choisissez exactement une matrice : un gène ou un vecteur."
+insert:
+    pcr:
+        required: "Un fragment de PCR doit indiquer la PCR qui l'a produit."
+    sites:
+        same_enzyme: "Un clonage dirigé demande deux enzymes différentes (les isoschizomères, comme NcoI et Bsp19I, comptent pour la même enzyme)."
+construct:
+    vector:
+        required: "Le vecteur est obligatoire."
+    insert:
+        required: "L'insert est obligatoire."
+    site:
+        cuts: "{{ enzyme }} coupe le vecteur {{ count }} fois : exactement une coupure est requise."
+cloning:
+    enzyme:
+        unknown: "« {{ name }} » n'est pas dans le catalogue d'enzymes de restriction de BioPHP."
+    parent:
+        quarantined: "Cet objet est en quarantaine et ne peut pas servir de parent."

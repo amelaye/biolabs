@@ -43,7 +43,7 @@
             <tbody>
             {% for entry in entries %}
                 <tr>
-                    <th scope="row">{% if type == 'genes' %}<a href="{{ path('app_target_gene_show', {id: entry.id}) }}">{{ entry.name }}</a>{% elseif type == 'products' %}<a href="{{ path('app_target_product_show', {id: entry.id}) }}">{{ entry.name }}</a>{% else %}{{ entry.name }}{% endif %}</th>
+                    <th scope="row">{% if type == 'genes' %}<a href="{{ path('app_target_gene_show', {id: entry.id}) }}">{{ entry.name }}</a>{% elseif type == 'products' %}<a href="{{ path('app_target_product_show', {id: entry.id}) }}">{{ entry.name }}</a>{% elseif type == 'oligos' %}<a href="{{ path('app_cloning_oligo_show', {id: entry.id}) }}">{{ entry.name }}</a>{% elseif type == 'vectors' %}<a href="{{ path('app_cloning_vector_show', {id: entry.id}) }}">{{ entry.name }}</a>{% elseif type == 'constructs' %}<a href="{{ path('app_cloning_construct_show', {id: entry.id}) }}">{{ entry.name }}</a>{% else %}{{ entry.name }}{% endif %}{% if entry.quarantined is defined and entry.quarantined %} <span class="badge badge-warning">{{ 'cloning.quarantine.badge'|trans }}</span>{% endif %}</th>
                     <td>{% include 'reference/_details.html.twig' %}</td>
                     <td>{{ usages[entry.id] }}</td>
                     <td>{{ (entry.active ? 'reference.status.active' : 'reference.status.archived')|trans }}</td>

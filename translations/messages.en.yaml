@@ -9,6 +9,7 @@ nav:
     home: Home
     references: Reference data
     targets: Targets
+    cloning: Cloning
 role:
     member: Member
     admin: Administrator
@@ -40,6 +41,11 @@ reference:
         complexes: Complexes
         genes: Genes
         products: Products
+        oligos: Oligos
+        vectors: Vectors
+        pcrs: PCRs
+        inserts: Inserts
+        constructs: Constructs
     field:
         name: Name
         notes: Notes
@@ -143,3 +149,118 @@ target:
         internal_stop: "%count% in-frame stop codon(s) before the end: readthrough, selenocysteine, pseudogene or wrong genetic code table?"
         ambiguity_codes: "The CDS contains ambiguity codes (N, R, Y...): the translation may contain X."
         window_has_stop: "The protein window contains a stop codon."
+cloning:
+    title: Cloning
+    tabs: Cloning lists
+    length: Length
+    tm: Melting temperature (Tm)
+    tm_conditions: "nearest-neighbour model, oligo %oligo% µM, monovalent cations %na% mM, Mg²⁺ %mg% mM"
+    tm_whole_oligo: "Tm of the whole oligo, computed by BioPHP. The hybridising part is not annotated yet: with a clamp or a restriction site, the annealing Tm is lower than this value."
+    tm_unavailable:
+        length: "Not computable: the oligo has fewer than two bases."
+        degenerate: "Not computable: the oligo contains degenerate bases (N, R, Y...)."
+        unknown_base: "Not computable: the oligo contains an unknown base (X)."
+    circular: circular
+    sequence_unavailable: Sequence not available
+    field:
+        supplier: Supplier
+        oligo_sequence: Oligo sequence (5′→3′)
+        vector_sequence: Vector sequence (circular)
+        marker: Selection marker
+        origin: Origin of replication
+        promoter: Promoter
+        tag_state: Tag capabilities
+        n_terminal_tag: N-terminal tag
+        c_terminal_tag: C-terminal tag
+        forward_oligo: Forward oligo
+        reverse_oligo: Reverse oligo
+        template_gene: Template — gene (targets)
+        template_vector: Template — vector
+        cycles: Number of cycles
+        denaturation_temp: Denaturation temperature (°C)
+        denaturation_seconds: Denaturation time (s)
+        annealing_temp: Annealing temperature (°C)
+        annealing_seconds: Annealing time (s)
+        extension_temp: Extension temperature (°C)
+        extension_seconds: Extension time (s)
+        reaction_volume: Reaction volume (µL)
+        insert_type: Type of insert
+        five_prime_site: Restriction enzyme at the 5′ end
+        three_prime_site: Restriction enzyme at the 3′ end
+        directional: Directional cloning (two different enzymes)
+        pcr: PCR that produced the insert
+        product: Product (targets)
+        vector: Vector
+        insert: Insert
+        products: Products
+        status: Status
+    help:
+        oligo_sequence: "5′→3′, A, C, G, T and IUPAC codes; spaces and case are ignored. The sequence is kept exactly as typed. It cannot be changed once a PCR uses the oligo."
+        vector_sequence: "Optional, circular, A, C, G, T and IUPAC codes; spaces and case are ignored. Leave empty when the sequence is not available."
+        tag_state: "'None' (the vector offers no tag) is not 'Unknown' (nobody checked). Choose 'Listed' to give the tags below."
+        template: "Choose a gene or a vector, not both."
+        site: "Name from the BioPHP enzyme catalogue (e.g. NcoI, NotI)."
+        directional: "Uncheck for a cloning with a single enzyme."
+    tag_state:
+        unknown: Unknown
+        none: None
+        listed: Listed
+    tag_position:
+        n_terminal: N-terminal
+        c_terminal: C-terminal
+    insert_type:
+        pcr_fragment: PCR fragment
+        restriction_fragment: Restriction fragment
+    status:
+        designed: "Designed (unique sites checked; order, orientation, ends and methylation NOT checked)"
+        not_evaluable: Not evaluable
+    quarantine:
+        badge: Quarantine
+        notice: "This object is set aside: it cannot be used as the parent of another object."
+    construct:
+        not_validated: "Biological validity is not evaluated in this version (assembly and reading frame are not computed). \"Designed\" only means that the vector sequence is known and each enzyme of the insert cuts it exactly once; the order of the sites, the orientation of the insert, the compatibility of the ends and the methylation sensitivity are not checked. The status is computed now from the current vector and insert."
+        cuts: "%count% cut(s) in the vector"
+        cuts_unknown: "Not counted (no vector sequence)"
+    usage:
+        title: Used by
+        none: Nothing uses it yet.
+        sequence_locked: "The sequence is locked while a PCR uses this oligo."
+    history:
+        title: History
+        empty: No recorded change.
+        when: Date
+        who: Author
+        field: Field
+        change: Change
+        field_sequence: Sequence
+        field_marker: Selection marker
+        field_sequenceRaw: Sequence as typed
+        field_vector: Vector
+        field_insert: Insert
+    warning:
+        oligo_length: "Length %length% nt, outside the usual range %low%–%high% nt."
+        tm_window: "Tm %tm% °C of the whole oligo (hybridising part not annotated), outside the indicative range %low%–%high% °C (unsourced range)."
+        tm_difference: "The Tm of the whole forward and reverse oligos (hybridising part not annotated) differ by %difference% °C (more than %max% °C)."
+        pcr_same_oligo: "The forward and reverse oligos are the same."
+        pcr_volume: "Reaction volume %volume% µL, outside the usual range %low%–%high% µL."
+        vector_no_sequence: "The vector has no sequence: the checks that need it are skipped and the construct stays not evaluable."
+        vector_ambiguous: "The vector sequence holds %count% base(s) other than A, C, G, T (N, X, IUPAC codes): the cut counts are not reliable."
+        product_not_linked: "No product of the targets is linked to this construct, or the product of the insert is not among them."
+attachment:
+    title: Attached files
+    none: No attached file.
+    field: "PDF file (%size% MB at most)"
+    upload: Attach
+    missing: file missing
+    flash:
+        uploaded: "\"%name%\" was attached."
+    error:
+        upload: The file could not be received.
+        size: The file is empty or larger than the allowed size.
+        type: Only PDF files are accepted.
+        encrypted: Encrypted PDF files are refused.
+        active_content: PDF files with scripts or launch actions are refused.
+        storage: The file could not be stored.
+        vector_unavailable: Files cannot be attached to an archived vector or one in quarantine.
+        too_many: "A vector holds at most %max% attached files."
+        duplicate: This file is already attached to this vector.

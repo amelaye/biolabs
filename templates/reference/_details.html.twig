@@ -14,4 +14,14 @@
     {{ entry.organism.name }}{% if entry.productName %} · {{ entry.productName }}{% endif %} · {{ entry.cdsLength }} nt
 {% elseif type == 'products' %}
     {{ ('target.product_type.' ~ entry.type.value)|trans }} · {{ entry.gene.name }}{% if entry.startNt is not null %} · {{ entry.startNt }}–{{ entry.endNt }} nt{% else %} · {{ 'target.whole_cds'|trans }}{% endif %}
+{% elseif type == 'oligos' %}
+    {{ entry.length }} nt{% if entry.supplier %} · {{ entry.supplier.name }}{% endif %}
+{% elseif type == 'vectors' %}
+    {% if entry.hasSequence %}{{ entry.sequenceLength }} bp{% else %}{{ 'cloning.sequence_unavailable'|trans }}{% endif %}{% if entry.marker %} · {{ entry.marker.name }}{% endif %}{% if entry.origin %} · {{ entry.origin.name }}{% endif %} · {{ ('cloning.tag_state.' ~ entry.tagState.value)|trans }}
+{% elseif type == 'pcrs' %}
+    {{ entry.forwardOligo.name }} / {{ entry.reverseOligo.name }} · {% if entry.templateGene %}{{ entry.templateGene.name }}{% else %}{{ entry.templateVector.name }}{% endif %}
+{% elseif type == 'inserts' %}
+    {{ ('cloning.insert_type.' ~ entry.type.value)|trans }}{% if entry.fivePrimeSite or entry.threePrimeSite %} · {{ entry.fivePrimeSite ?: '—' }} / {{ entry.threePrimeSite ?: '—' }}{% endif %}{% if entry.product %} · {{ entry.product.name }}{% endif %}
+{% elseif type == 'constructs' %}
+    {{ entry.vector.name }} + {{ entry.insert.name }}{# status is derived on the detail page only #}
 {% endif %}

@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ vector.name }}{% endblock %}
+
+{% block body %}
+<h1>{{ 'cloning.title'|trans }}</h1>
+{% include 'reference/_tabs.html.twig' %}
+
+<section class="card">
+    <h2>{{ vector.name }}{% if not vector.active %} <small class="muted">({{ 'reference.status.archived'|trans }})</small>{% endif %}</h2>
+    {% include 'cloning/_quarantine.html.twig' with {entity: vector} %}
+    <dl class="facts">
+        <dt>{{ 'cloning.field.vector_sequence'|trans }}</dt>
+        <dd>{% if vector.hasSequence %}{{ vector.sequenceLength }} bp · {{ 'cloning.circular'|trans }}{% else %}<span class="muted">{{ 'cloning.sequence_unavailable'|trans }}</span>{% endif %}</dd>
+        {% if vector.supplier %}<dt>{{ 'cloning.field.supplier'|trans }}</dt><dd>{{ vector.supplier.name }}</dd>{% endif %}
+        {% if vector.marker %}<dt>{{ 'cloning.field.marker'|trans }}</dt><dd>{{ vector.marker.name }}</dd>{% endif %}
+        {% if vector.origin %}<dt>{{ 'cloning.field.origin'|trans }}</dt><dd>{{ vector.origin.name }}</dd>{% endif %}
+        {% if vector.promoter %}<dt>{{ 'cloning.field.promoter'|trans }}</dt><dd>{{ vector.promoter.name }}</dd>{% endif %}
+        <dt>{{ 'cloning.field.tag_state'|trans }}</dt>
+        <dd>
+            {{ ('cloning.tag_state.' ~ vector.tagState.value)|trans }}
+            {% if vector.tagCapabilities|length %}
+                <ul>
+                {% for capability in vector.tagCapabilities %}
+                    <li>{{ capability.tag.name }} · {{ ('cloning.tag_position.' ~ capability.position.value)|trans }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </dd>
+    </dl>
+    {% if vector.notes %}<p>{{ vector.notes }}</p>{% endif %}
+
+    <h3>{{ 'attachment.title'|trans }}</h3>
+    {% if attachments is empty %}
+        <p class="muted">{{ 'attachment.none'|trans }}</p>
+    {% else %}
+        <ul>
+        {% for item in attachments %}
+            <li>
+                {% if item.present %}
+                    <a href="{{ path('app_cloning_attachment_download', {id: item.attachment.id}) }}">{{ item.attachment.originalName }}</a>
+                {% else %}
+                    {{ item.attachment.originalName }} <span class="badge badge-warning">{{ 'attachment.missing'|trans }}</span>
+                {% endif %}
+                <small class="muted">({{ (item.attachment.sizeBytes / 1024)|number_format(0, '.', ' ') }} KB · {{ item.attachment.uploadedAt|date('Y-m-d') }} · {{ item.attachment.uploadedBy ? item.attachment.uploadedBy.displayName : '—' }})</small>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    <form method="post" action="{{ path('app_cloning_attachment_upload', {id: vector.id}) }}" enctype="multipart/form-data" class="upload-form">
+        <input type="hidden" name="_token" value="{{ csrf_token('attachment_upload_' ~ vector.id) }}">
+        <div class="field">
+            <label for="attachment-file">{{ 'attachment.field'|trans({'%size%': max_size_mb}) }}</label>
+            <input type="file" id="attachment-file" name="file" accept="application/pdf,.pdf" required>
+        </div>
+        <button class="btn" type="submit">{{ 'attachment.upload'|trans }}</button>
+    </form>
+
+    <h3>{{ 'reference.type.constructs'|trans }}</h3>
+    {% if constructs is empty %}
+        <p class="muted">{{ 'cloning.usage.none'|trans }}</p>
+    {% else %}
+        <ul>
+        {% for construct in constructs %}<li><a href="{{ path('app_cloning_construct_show', {id: construct.id}) }}">{{ construct.name }}</a></li>{% endfor %}
+        </ul>
+    {% endif %}
+
+    {% include 'cloning/_history.html.twig' %}
+    <p>
+        <a class="btn" href="{{ path('app_cloning_edit', {type: 'vectors', id: vector.id}) }}">{{ 'reference.edit'|trans }}</a>
+        <a class="btn" href="{{ path('app_cloning_index', {type: 'vectors'}) }}">{{ 'reference.back'|trans }}</a>
+    </p>
+</section>
+{% endblock %}

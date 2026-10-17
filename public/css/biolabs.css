@@ -120,3 +120,8 @@ pre.sequence { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monos
 dl.facts { display: grid; grid-template-columns: max-content 1fr; gap: .25rem 1rem; }
 dl.facts dt { color: var(--muted); }
 dl.facts dd { margin: 0; }
+
+.badge { display: inline-block; font-size: .75rem; border: 1px solid var(--border); border-radius: 999px; padding: .05rem .6rem; vertical-align: middle; }
+.badge-warning { background: var(--danger-soft); border-color: var(--danger); }
+.history { font-size: .9rem; }
+.upload-form { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: flex-end; margin-top: 1rem; }

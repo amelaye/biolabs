@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace App\Reference\Service;
 
+use App\Cloning\Service\CloningChecks;
 use App\Reference\Entity\AbstractReference;
 use App\Reference\Entity\Organism;
 use App\Reference\Entity\SelectionMarker;
@@ -32,11 +33,13 @@ final class ReferenceWarnings
      * @param EntityManagerInterface $em Entity manager used to look for near-duplicates
      * @param ReferenceUsage $usage Counts the objects that use an entry
      * @param TargetChecks $targetChecks Biological checks on genes and products
+     * @param CloningChecks $cloningChecks Checks on oligos, vectors, PCRs and constructs
      */
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly ReferenceUsage $usage,
         private readonly TargetChecks $targetChecks,
+        private readonly CloningChecks $cloningChecks,
     ) {
     }
 
@@ -77,6 +80,8 @@ final class ReferenceWarnings
         if ($entry instanceof Product) {
             array_push($warnings, ...$this->targetChecks->forProduct($entry));
         }
+
+        array_push($warnings, ...$this->cloningChecks->for($entry));
 
         if ([] !== $before && $before !== $entry->significantValues() && ($uses = $this->usage->count($entry)) > 0) {
             $warnings[] = ['key' => 'reference.warning.used_entry_changed', 'params' => ['%count%' => $uses]];

@@ -1,0 +1,6 @@
+{% if entity.quarantined %}
+    <div class="notice notice-warning" role="status">
+        <strong>{{ 'cloning.quarantine.badge'|trans }}</strong> — {{ 'cloning.quarantine.notice'|trans }}
+        {% if entity.quarantineReason %}<br>{{ entity.quarantineReason }}{% endif %}
+    </div>
+{% endif %}

@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ oligo.name }}{% endblock %}
+
+{% block body %}
+<h1>{{ 'cloning.title'|trans }}</h1>
+{% include 'reference/_tabs.html.twig' %}
+
+<section class="card">
+    <h2>{{ oligo.name }}{% if not oligo.active %} <small class="muted">({{ 'reference.status.archived'|trans }})</small>{% endif %}</h2>
+    {% include 'cloning/_quarantine.html.twig' with {entity: oligo} %}
+    <dl class="facts">
+        <dt>{{ 'cloning.length'|trans }}</dt><dd>{{ oligo.length }} nt</dd>
+        {% if oligo.supplier %}<dt>{{ 'cloning.field.supplier'|trans }}</dt><dd>{{ oligo.supplier.name }}</dd>{% endif %}
+        <dt>{{ 'cloning.tm'|trans }}</dt>
+        <dd>
+            {% if tm %}
+                {{ tm.tm|number_format(1, '.', ' ') }} °C
+                <small class="muted">({{ 'cloning.tm_conditions'|trans({'%oligo%': tm.oligoUm, '%na%': tm.monovalentMm, '%mg%': tm.magnesiumMm}) }})</small>
+            {% else %}
+                <span class="muted">{{ ('cloning.tm_unavailable.' ~ tm_reason)|trans }}</span>
+            {% endif %}
+        </dd>
+    </dl>
+    {% if tm %}<p class="muted">{{ 'cloning.tm_whole_oligo'|trans }}</p>{% endif %}
+    {% if oligo.notes %}<p>{{ oligo.notes }}</p>{% endif %}
+
+    <h3>{{ 'cloning.field.oligo_sequence'|trans }}</h3>
+    <pre class="sequence" tabindex="0">{{ oligo.sequence|split('', 10)|join(' ') }}</pre>
+
+    <h3>{{ 'cloning.usage.title'|trans }}</h3>
+    {% if pcrs is empty %}
+        <p class="muted">{{ 'cloning.usage.none'|trans }}</p>
+    {% else %}
+        <p>{{ 'cloning.usage.sequence_locked'|trans }}</p>
+        <ul>
+        {% for pcr in pcrs %}<li>{{ 'reference.type.pcrs'|trans }} : {{ pcr.name }}</li>{% endfor %}
+        {% for insert in inserts %}<li>{{ 'reference.type.inserts'|trans }} : {{ insert.name }}</li>{% endfor %}
+        {% for construct in constructs %}<li>{{ 'reference.type.constructs'|trans }} : <a href="{{ path('app_cloning_construct_show', {id: construct.id}) }}">{{ construct.name }}</a></li>{% endfor %}
+        </ul>
+    {% endif %}
+
+    {% include 'cloning/_history.html.twig' %}
+    <p>
+        <a class="btn" href="{{ path('app_cloning_edit', {type: 'oligos', id: oligo.id}) }}">{{ 'reference.edit'|trans }}</a>
+        <a class="btn" href="{{ path('app_cloning_index', {type: 'oligos'}) }}">{{ 'reference.back'|trans }}</a>
+    </p>
+</section>
+{% endblock %}

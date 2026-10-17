@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ construct.name }}{% endblock %}
+
+{% block body %}
+<h1>{{ 'cloning.title'|trans }}</h1>
+{% include 'reference/_tabs.html.twig' %}
+
+<section class="card">
+    <h2>{{ construct.name }}{% if not construct.active %} <small class="muted">({{ 'reference.status.archived'|trans }})</small>{% endif %}</h2>
+    {% include 'cloning/_quarantine.html.twig' with {entity: construct} %}
+    <div class="notice notice-warning" role="status">{{ 'cloning.construct.not_validated'|trans }}</div>
+    <dl class="facts">
+        <dt>{{ 'cloning.field.status'|trans }}</dt><dd>{{ ('cloning.status.' ~ status.value)|trans }}</dd>
+        <dt>{{ 'cloning.field.vector'|trans }}</dt>
+        <dd><a href="{{ path('app_cloning_vector_show', {id: construct.vector.id}) }}">{{ construct.vector.name }}</a></dd>
+        <dt>{{ 'cloning.field.insert'|trans }}</dt><dd>{{ construct.insert.name }}</dd>
+        {% if construct.products|length %}
+            <dt>{{ 'cloning.field.products'|trans }}</dt>
+            <dd>{{ construct.products|map(p => p.name)|join(', ') }}</dd>
+        {% endif %}
+        {% for enzyme, count in cuts %}
+            <dt>{{ enzyme }}</dt>
+            <dd>{% if count is null %}<span class="muted">{{ 'cloning.construct.cuts_unknown'|trans }}</span>{% else %}{{ 'cloning.construct.cuts'|trans({'%count%': count}) }}{% endif %}</dd>
+        {% endfor %}
+    </dl>
+    {% if construct.notes %}<p>{{ construct.notes }}</p>{% endif %}
+    {% for warning in warnings %}<div class="notice notice-warning" role="status">{{ warning }}</div>{% endfor %}
+
+    {% include 'cloning/_history.html.twig' %}
+    <p>
+        <a class="btn" href="{{ path('app_cloning_edit', {type: 'constructs', id: construct.id}) }}">{{ 'reference.edit'|trans }}</a>
+        <a class="btn" href="{{ path('app_cloning_index', {type: 'constructs'}) }}">{{ 'reference.back'|trans }}</a>
+    </p>
+</section>
+{% endblock %}

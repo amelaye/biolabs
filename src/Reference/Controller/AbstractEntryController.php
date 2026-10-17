@@ -52,7 +52,7 @@ abstract class AbstractEntryController extends AbstractController
     /**
      * Group of lists served by the controller.
      *
-     * @return string ReferenceRegistry::GROUP_REFERENCE or GROUP_TARGET
+     * @return string ReferenceRegistry::GROUP_REFERENCE, GROUP_TARGET or GROUP_CLONING
      */
     abstract protected function group(): string;
 
@@ -104,6 +104,7 @@ abstract class AbstractEntryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->prepareEntry($entry);
             $this->em->persist($entry);
             $this->em->flush();
 
@@ -124,6 +125,17 @@ abstract class AbstractEntryController extends AbstractController
             'is_new' => $isNew,
             'usage' => $isNew ? 0 : $this->usage->count($entry),
         ], new Response(status: $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK));
+    }
+
+    /**
+     * Hook called on a valid entry just before it is stored: lets a controller apply what the person never types
+     * (derived status, catalogue spelling). Does nothing by default.
+     *
+     * @param AbstractReference $entry Validated entry about to be stored
+     * @return void
+     */
+    protected function prepareEntry(AbstractReference $entry): void
+    {
     }
 
     /**

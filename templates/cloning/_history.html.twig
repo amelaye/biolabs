@@ -1,0 +1,33 @@
+{# Recorded changes of the tracked fields. A sequence is shown by its length only. #}
+<h3>{{ 'cloning.history.title'|trans }}</h3>
+{% if history is empty %}
+    <p class="muted">{{ 'cloning.history.empty'|trans }}</p>
+{% else %}
+    <table class="data history">
+        <caption class="sr-only">{{ 'cloning.history.title'|trans }}</caption>
+        <thead>
+            <tr>
+                <th scope="col">{{ 'cloning.history.when'|trans }}</th>
+                <th scope="col">{{ 'cloning.history.who'|trans }}</th>
+                <th scope="col">{{ 'cloning.history.field'|trans }}</th>
+                <th scope="col">{{ 'cloning.history.change'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for row in history %}
+            <tr>
+                <td>{{ row.changedAt|date('Y-m-d H:i') }}</td>
+                <td>{{ row.changedBy ? row.changedBy.displayName : '—' }}</td>
+                <td>{{ ('cloning.history.field_' ~ row.field)|trans }}</td>
+                <td>
+                    {% if row.field in ['sequence', 'sequenceRaw'] %}
+                        {{ row.oldValue is null ? '—' : (row.oldValue|length ~ ' nt') }} → {{ row.newValue is null ? '—' : (row.newValue|length ~ ' nt') }}
+                    {% else %}
+                        {{ row.oldValue ?? '—' }} → {{ row.newValue ?? '—' }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}

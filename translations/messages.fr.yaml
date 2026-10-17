@@ -9,6 +9,7 @@ nav:
     home: Accueil
     references: Référentiels
     targets: Cibles
+    cloning: Clonage
 role:
     member: Membre
     admin: Administrateur
@@ -40,6 +41,11 @@ reference:
         complexes: Complexes
         genes: Gènes
         products: Produits
+        oligos: Oligos
+        vectors: Vecteurs
+        pcrs: PCR
+        inserts: Inserts
+        constructs: Constructions
     field:
         name: Nom
         notes: Notes
@@ -143,3 +149,118 @@ target:
         internal_stop: "%count% codon(s) stop dans le cadre de lecture avant la fin : lecture à travers, sélénocystéine, pseudogène ou mauvaise table génétique ?"
         ambiguity_codes: "Le CDS contient des codes d'ambiguïté (N, R, Y…) : la traduction peut contenir des X."
         window_has_stop: "La fenêtre de la protéine contient un codon stop."
+cloning:
+    title: Clonage
+    tabs: Listes de clonage
+    length: Longueur
+    tm: Température de fusion (Tm)
+    tm_conditions: "modèle des plus proches voisins, oligo %oligo% µM, cations monovalents %na% mM, Mg²⁺ %mg% mM"
+    tm_whole_oligo: "Tm de l'oligo entier, calculée par BioPHP. La partie hybridante n'est pas encore annotée : avec un clamp ou un site de restriction, la Tm d'hybridation est plus basse que cette valeur."
+    tm_unavailable:
+        length: "Non calculable : l'oligo a moins de deux bases."
+        degenerate: "Non calculable : l'oligo contient des bases dégénérées (N, R, Y...)."
+        unknown_base: "Non calculable : l'oligo contient une base inconnue (X)."
+    circular: circulaire
+    sequence_unavailable: Séquence non disponible
+    field:
+        supplier: Fournisseur
+        oligo_sequence: Séquence de l'oligo (5′→3′)
+        vector_sequence: Séquence du vecteur (circulaire)
+        marker: Marqueur de sélection
+        origin: Origine de réplication
+        promoter: Promoteur
+        tag_state: Capacités de tag
+        n_terminal_tag: Tag N-terminal
+        c_terminal_tag: Tag C-terminal
+        forward_oligo: Oligo sens (forward)
+        reverse_oligo: Oligo antisens (reverse)
+        template_gene: Matrice — gène (cibles)
+        template_vector: Matrice — vecteur
+        cycles: Nombre de cycles
+        denaturation_temp: Température de dénaturation (°C)
+        denaturation_seconds: Durée de dénaturation (s)
+        annealing_temp: Température d'hybridation (°C)
+        annealing_seconds: Durée d'hybridation (s)
+        extension_temp: Température d'élongation (°C)
+        extension_seconds: Durée d'élongation (s)
+        reaction_volume: Volume de réaction (µL)
+        insert_type: Type d'insert
+        five_prime_site: Enzyme de restriction à l'extrémité 5′
+        three_prime_site: Enzyme de restriction à l'extrémité 3′
+        directional: Clonage dirigé (deux enzymes différentes)
+        pcr: PCR qui a produit l'insert
+        product: Produit (cibles)
+        vector: Vecteur
+        insert: Insert
+        products: Produits
+        status: Statut
+    help:
+        oligo_sequence: "5′→3′, A, C, G, T et codes IUPAC ; espaces et casse ignorés. La séquence saisie est conservée telle quelle. Elle ne peut plus être modifiée dès qu'une PCR utilise l'oligo."
+        vector_sequence: "Facultative, circulaire, A, C, G, T et codes IUPAC ; espaces et casse ignorés. Laisser vide si la séquence n'est pas disponible."
+        tag_state: "« Aucune » (le vecteur n'offre pas de tag) n'est pas « Inconnue » (personne n'a vérifié). Choisir « Liste » pour renseigner les tags ci-dessous."
+        template: "Choisir un gène ou un vecteur, pas les deux."
+        site: "Nom du catalogue d'enzymes de BioPHP (p. ex. NcoI, NotI)."
+        directional: "Décocher pour un clonage avec une seule enzyme."
+    tag_state:
+        unknown: Inconnue
+        none: Aucune
+        listed: Liste
+    tag_position:
+        n_terminal: N-terminal
+        c_terminal: C-terminal
+    insert_type:
+        pcr_fragment: Fragment de PCR
+        restriction_fragment: Fragment de restriction
+    status:
+        designed: "Conçue (sites uniques vérifiés ; ordre, orientation, extrémités et méthylation NON vérifiés)"
+        not_evaluable: Non évaluable
+    quarantine:
+        badge: Quarantaine
+        notice: "Cet objet est mis de côté : il ne peut pas devenir le parent d'un autre objet."
+    construct:
+        not_validated: "La validité biologique n'est pas évaluée dans cette version (l'assemblage et le cadre de lecture ne sont pas calculés). « Conçue » signifie seulement que la séquence du vecteur est connue et que chaque enzyme de l'insert le coupe exactement une fois ; l'ordre des sites, l'orientation de l'insert, la compatibilité des extrémités et la sensibilité à la méthylation ne sont pas vérifiés. Le statut est calculé à l'instant à partir du vecteur et de l'insert actuels."
+        cuts: "%count% coupure(s) dans le vecteur"
+        cuts_unknown: "Non comptée (pas de séquence de vecteur)"
+    usage:
+        title: Utilisé par
+        none: Rien ne l'utilise pour l'instant.
+        sequence_locked: "La séquence est verrouillée tant qu'une PCR utilise cet oligo."
+    history:
+        title: Historique
+        empty: Aucune modification enregistrée.
+        when: Date
+        who: Auteur
+        field: Champ
+        change: Changement
+        field_sequence: Séquence
+        field_marker: Marqueur de sélection
+        field_sequenceRaw: Séquence telle que saisie
+        field_vector: Vecteur
+        field_insert: Insert
+    warning:
+        oligo_length: "Longueur %length% nt, hors de la plage usuelle %low%–%high% nt."
+        tm_window: "Tm de l'oligo entier %tm% °C (partie hybridante non annotée), hors de la plage indicative %low%–%high% °C (plage non sourcée)."
+        tm_difference: "Les Tm des oligos entiers (partie hybridante non annotée) F et R diffèrent de %difference% °C (plus de %max% °C)."
+        pcr_same_oligo: "Les oligos sens et antisens sont identiques."
+        pcr_volume: "Volume de réaction %volume% µL, hors de la plage usuelle %low%–%high% µL."
+        vector_no_sequence: "Le vecteur n'a pas de séquence : les contrôles qui en dépendent sont ignorés et la construction reste non évaluable."
+        vector_ambiguous: "La séquence du vecteur contient %count% base(s) autre(s) que A, C, G, T (N, X, codes IUPAC) : le nombre de coupures n'est pas fiable."
+        product_not_linked: "Aucun produit des cibles n'est lié à cette construction, ou le produit de l'insert n'en fait pas partie."
+attachment:
+    title: Fichiers joints
+    none: Aucun fichier joint.
+    field: "Fichier PDF (%size% Mo au plus)"
+    upload: Joindre
+    missing: fichier manquant
+    flash:
+        uploaded: "« %name% » a été joint."
+    error:
+        upload: Le fichier n'a pas pu être reçu.
+        size: Le fichier est vide ou dépasse la taille autorisée.
+        type: Seuls les fichiers PDF sont acceptés.
+        encrypted: Les PDF chiffrés sont refusés.
+        active_content: Les PDF contenant des scripts ou des actions de lancement sont refusés.
+        storage: Le fichier n'a pas pu être enregistré.
+        vector_unavailable: Aucun fichier ne peut être joint à un vecteur archivé ou en quarantaine.
+        too_many: "Un vecteur porte au plus %max% fichiers joints."
+        duplicate: Ce fichier est déjà joint à ce vecteur.

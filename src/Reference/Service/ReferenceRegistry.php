@@ -9,6 +9,16 @@ declare(strict_types=1);
 
 namespace App\Reference\Service;
 
+use App\Cloning\Entity\Construct;
+use App\Cloning\Entity\Insert;
+use App\Cloning\Entity\Oligo;
+use App\Cloning\Entity\Pcr;
+use App\Cloning\Entity\Vector;
+use App\Cloning\Form\ConstructFormType;
+use App\Cloning\Form\InsertFormType;
+use App\Cloning\Form\OligoFormType;
+use App\Cloning\Form\PcrFormType;
+use App\Cloning\Form\VectorFormType;
 use App\Reference\Entity\AbstractReference;
 use App\Reference\Entity\Organism;
 use App\Reference\Entity\Promoter;
@@ -39,10 +49,12 @@ final class ReferenceRegistry
 {
     public const GROUP_REFERENCE = 'reference';
     public const GROUP_TARGET = 'target';
+    public const GROUP_CLONING = 'cloning';
 
     /** Slugs as used in the URLs; keep in sync with the route requirement of the controllers. */
     public const SLUG_PATTERN = 'organisms|strains|markers|promoters|origins|tags|suppliers';
     public const TARGET_SLUG_PATTERN = 'complexes|genes|products';
+    public const CLONING_SLUG_PATTERN = 'oligos|vectors|pcrs|inserts|constructs';
 
     private const TYPES = [
         'organisms' => [Organism::class, OrganismType::class],
@@ -55,14 +67,20 @@ final class ReferenceRegistry
         'complexes' => [Complex::class, ComplexFormType::class],
         'genes' => [Gene::class, GeneFormType::class],
         'products' => [Product::class, ProductFormType::class],
+        'oligos' => [Oligo::class, OligoFormType::class],
+        'vectors' => [Vector::class, VectorFormType::class],
+        'pcrs' => [Pcr::class, PcrFormType::class],
+        'inserts' => [Insert::class, InsertFormType::class],
+        'constructs' => [Construct::class, ConstructFormType::class],
     ];
 
     private const TARGET_SLUGS = ['complexes', 'genes', 'products'];
+    private const CLONING_SLUGS = ['oligos', 'vectors', 'pcrs', 'inserts', 'constructs'];
 
     /**
      * Slugs of one group of lists (the tabs of a menu entry).
      *
-     * @param string $group ReferenceRegistry::GROUP_REFERENCE or GROUP_TARGET
+     * @param string $group ReferenceRegistry::GROUP_REFERENCE, GROUP_TARGET or GROUP_CLONING
      * @return list<string> The URL slugs, in tab order
      */
     public function slugs(string $group = self::GROUP_REFERENCE): array
@@ -77,11 +95,15 @@ final class ReferenceRegistry
      * Group a list belongs to.
      *
      * @param string $slug URL slug of the list
-     * @return string ReferenceRegistry::GROUP_REFERENCE or GROUP_TARGET
+     * @return string ReferenceRegistry::GROUP_REFERENCE, GROUP_TARGET or GROUP_CLONING
      */
     public function groupOf(string $slug): string
     {
-        return \in_array($slug, self::TARGET_SLUGS, true) ? self::GROUP_TARGET : self::GROUP_REFERENCE;
+        return match (true) {
+            \in_array($slug, self::TARGET_SLUGS, true) => self::GROUP_TARGET,
+            \in_array($slug, self::CLONING_SLUGS, true) => self::GROUP_CLONING,
+            default => self::GROUP_REFERENCE,
+        };
     }
 
     /**

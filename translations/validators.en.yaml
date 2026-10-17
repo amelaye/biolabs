@@ -24,3 +24,39 @@ product:
         start_after_end: "The start must be less than or equal to the end."
         beyond_cds: "The end is beyond the length of the CDS ({{ length }} nt)."
         out_of_frame: "For a protein, the window must start at the first nucleotide of a codon and span a whole number of codons."
+oligo:
+    sequence:
+        empty: "The sequence is required."
+        invalid_symbol: "The sequence contains a symbol that is not a nucleotide code (A, C, G, T or IUPAC)."
+        too_long: "The sequence is longer than {{ max }} nt."
+        locked: "The sequence cannot be changed: {{ count }} PCR(s) use this oligo."
+vector:
+    sequence:
+        invalid_symbol: "The sequence contains a symbol that is not a nucleotide code (A, C, G, T or IUPAC)."
+    tags:
+        listed_without_tag: "Choose at least one tag, or set the state to 'None' or 'Unknown'."
+        tag_without_listed: "A tag is chosen: set the state to 'Listed'."
+pcr:
+    forward:
+        required: "The forward oligo is required."
+    reverse:
+        required: "The reverse oligo is required."
+    template:
+        exactly_one: "Choose exactly one template: a gene or a vector."
+insert:
+    pcr:
+        required: "A PCR fragment must name the PCR that produced it."
+    sites:
+        same_enzyme: "A directional cloning needs two different enzymes (isoschizomers such as NcoI and Bsp19I count as the same enzyme)."
+construct:
+    vector:
+        required: "The vector is required."
+    insert:
+        required: "The insert is required."
+    site:
+        cuts: "{{ enzyme }} cuts the vector {{ count }} time(s): exactly one cut is required."
+cloning:
+    enzyme:
+        unknown: "\"{{ name }}\" is not in the BioPHP restriction enzyme catalogue."
+    parent:
+        quarantined: "This object is in quarantine and cannot be used as a parent."
