@@ -1,0 +1,26 @@
+app:
+    name: Laboratory
+    footer: "biolabs — cloning and protein production tracking. Biological computations: BioPHP and BioTools."
+a11y:
+    skip_to_content: Skip to content
+nav:
+    main: Main navigation
+    language: Language
+    home: Home
+role:
+    member: Member
+    admin: Administrator
+security:
+    logout: Sign out
+    login:
+        title: Sign in
+        email: Email address
+        password: Password
+        submit: Sign in
+user:
+    email:
+        already_used: An account already exists with this address.
+home:
+    welcome: "Hello %name%"
+    intro: Welcome to biolabs, the tracking of the laboratory's constructs, samples and productions.
+    no_modules: Modules (reference data, cloning, samples, production) will be added batch by batch.

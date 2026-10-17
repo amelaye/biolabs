@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'security.login.title'|trans }}{% endblock %}
+
+{% block body %}
+<section class="card card-narrow">
+    <h1>{{ 'security.login.title'|trans }}</h1>
+
+    {% if error %}
+        <div class="notice notice-error" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <form method="post" novalidate>
+        <div class="field">
+            <label for="username">{{ 'security.login.email'|trans }}</label>
+            <input type="email" id="username" name="_username" value="{{ last_username }}" autocomplete="username" autofocus required>
+        </div>
+        <div class="field">
+            <label for="password">{{ 'security.login.password'|trans }}</label>
+            <input type="password" id="password" name="_password" autocomplete="current-password" required>
+        </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <button class="btn btn-primary" type="submit">{{ 'security.login.submit'|trans }}</button>
+    </form>
+</section>
+{% endblock %}

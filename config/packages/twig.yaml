@@ -1,0 +1,13 @@
+twig:
+    file_name_pattern: '*.twig'
+    globals:
+        # languages offered by the selector (see App\Shared\Locale\LocaleSubscriber)
+        bl_locales: '%app.supported_locales%'
+        # Main navigation: a batch that delivers a page adds it here.
+        #   route: route name; label: translation key; role: minimum required role
+        bl_nav:
+            - { route: 'app_home', label: 'nav.home', role: 'ROLE_MEMBER' }
+
+when@test:
+    twig:
+        strict_variables: true

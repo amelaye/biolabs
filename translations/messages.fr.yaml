@@ -1,0 +1,26 @@
+app:
+    name: Laboratoire
+    footer: "biolabs — suivi de clonage et de production de protéines. Calculs biologiques : BioPHP et BioTools."
+a11y:
+    skip_to_content: Aller au contenu
+nav:
+    main: Navigation principale
+    language: Langue
+    home: Accueil
+role:
+    member: Membre
+    admin: Administrateur
+security:
+    logout: Se déconnecter
+    login:
+        title: Connexion
+        email: Adresse e-mail
+        password: Mot de passe
+        submit: Se connecter
+user:
+    email:
+        already_used: Un compte existe déjà avec cette adresse.
+home:
+    welcome: "Bonjour %name%"
+    intro: Bienvenue dans biolabs, le suivi des constructions, échantillons et productions du laboratoire.
+    no_modules: Les modules (référentiels, clonage, échantillons, production) seront ajoutés lot par lot.

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'nav.home'|trans }}{% endblock %}
+
+{% block body %}
+<section class="card">
+    <h1>{{ 'home.welcome'|trans({'%name%': app.user.displayName}) }}</h1>
+    <p class="lead">{{ 'home.intro'|trans }}</p>
+    <p class="muted">{{ 'home.no_modules'|trans }}</p>
+</section>
+{% endblock %}

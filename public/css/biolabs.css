@@ -1,0 +1,94 @@
+:root {
+    --bg: #f6f8f8;
+    --surface: #ffffff;
+    --text: #17262b;
+    --muted: #54656b;
+    --border: #d5dfe1;
+    --accent: #0f766e;
+    --accent-contrast: #ffffff;
+    --accent-soft: #dff3f0;
+    --danger: #b42318;
+    --danger-soft: #fdecea;
+    --info-soft: #e6f0fb;
+    --radius: 8px;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg: #0f1a1d;
+        --surface: #16262a;
+        --text: #e6eef0;
+        --muted: #9db0b5;
+        --border: #2b4247;
+        --accent: #2dd4bf;
+        --accent-contrast: #052e2a;
+        --accent-soft: #123a37;
+        --danger: #ff8a7e;
+        --danger-soft: #3a1b18;
+        --info-soft: #14283d;
+    }
+}
+:root[data-theme="dark"] {
+    --bg: #0f1a1d; --surface: #16262a; --text: #e6eef0; --muted: #9db0b5; --border: #2b4247;
+    --accent: #2dd4bf; --accent-contrast: #052e2a; --accent-soft: #123a37;
+    --danger: #ff8a7e; --danger-soft: #3a1b18; --info-soft: #14283d;
+}
+
+* { box-sizing: border-box; }
+html { font-size: 16px; }
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.55;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.wrap { width: 100%; max-width: 72rem; margin: 0 auto; padding: 0 1rem; }
+main.wrap { flex: 1; padding-top: 2rem; padding-bottom: 2rem; }
+
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.skip-link { position: absolute; left: -999px; top: 0; background: var(--accent); color: var(--accent-contrast); padding: .5rem 1rem; z-index: 10; }
+.skip-link:focus { left: 0; }
+
+.site-header { background: var(--surface); border-bottom: 1px solid var(--border); }
+.header-row { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; min-height: 3.5rem; padding-top: .5rem; padding-bottom: .5rem; }
+.brand { font-weight: 700; font-size: 1.15rem; letter-spacing: .02em; text-decoration: none; color: var(--accent); }
+.main-nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 1rem; }
+.main-nav a { text-decoration: none; color: var(--text); padding: .25rem 0; border-bottom: 2px solid transparent; }
+.main-nav a[aria-current="page"], .main-nav a:hover { border-bottom-color: var(--accent); }
+.header-tools { margin-left: auto; display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+
+.lang-switch { display: flex; gap: .25rem; }
+.lang-switch a { text-decoration: none; color: var(--muted); padding: .1rem .45rem; border: 1px solid var(--border); border-radius: 4px; font-size: .85rem; }
+.lang-switch a[aria-current="true"] { background: var(--accent-soft); color: var(--text); border-color: var(--accent); font-weight: 600; }
+
+.user-chip { display: inline-flex; align-items: center; gap: .5rem; }
+.user-name { font-weight: 600; }
+.role-badge { font-size: .75rem; background: var(--accent-soft); border: 1px solid var(--border); border-radius: 999px; padding: .05rem .6rem; color: var(--muted); }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+.card-narrow { max-width: 26rem; margin: 2rem auto; }
+h1 { margin-top: 0; font-size: 1.6rem; line-height: 1.25; }
+.lead { font-size: 1.1rem; }
+.muted { color: var(--muted); }
+
+.field { margin-bottom: 1rem; }
+.field label { display: block; margin-bottom: .25rem; font-weight: 600; }
+.field input { width: 100%; padding: .55rem .7rem; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 6px; }
+
+.btn { display: inline-block; font: inherit; cursor: pointer; border-radius: 6px; padding: .5rem 1rem; border: 1px solid var(--border); text-decoration: none; color: var(--text); background: var(--surface); }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); font-weight: 600; width: 100%; }
+.btn-quiet { padding: .3rem .75rem; font-size: .9rem; }
+
+.notice { border: 1px solid var(--border); border-left-width: 4px; border-radius: 6px; padding: .75rem 1rem; margin-bottom: 1rem; background: var(--info-soft); }
+.notice-error { background: var(--danger-soft); border-color: var(--danger); }
+
+.site-footer { border-top: 1px solid var(--border); color: var(--muted); font-size: .85rem; padding: 1rem 0; }
+
+@media (max-width: 40rem) {
+    .header-tools { margin-left: 0; width: 100%; }
+}

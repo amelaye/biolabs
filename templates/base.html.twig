@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ 'app.name'|trans }}{% endblock %} · biolabs</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f766e'/%3E%3Cpath d='M10 6c0 7 12 7 12 14M22 6c0 7-12 7-12 14M12 11h8M12 21h8' stroke='white' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="{{ asset('css/biolabs.css') }}">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+<a class="skip-link" href="#main">{{ 'a11y.skip_to_content'|trans }}</a>
+
+<header class="site-header">
+    <div class="wrap header-row">
+        <a class="brand" href="{{ path('app_home') }}">biolabs</a>
+
+        {% if app.user %}
+            <nav class="main-nav" aria-label="{{ 'nav.main'|trans }}">
+                <ul>
+                    {% for item in bl_nav %}
+                        {% if is_granted(item.role) %}
+                            <li><a href="{{ path(item.route) }}"{% if app.request.attributes.get('_route') == item.route %} aria-current="page"{% endif %}>{{ item.label|trans }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </nav>
+        {% endif %}
+
+        <div class="header-tools">
+            <nav class="lang-switch" aria-label="{{ 'nav.language'|trans }}">
+                {% for locale in bl_locales %}
+                    <a href="?_locale={{ locale }}" hreflang="{{ locale }}" lang="{{ locale }}"{% if locale == app.request.locale %} aria-current="true"{% endif %}>{{ locale|upper }}</a>
+                {% endfor %}
+            </nav>
+
+            {% if app.user %}
+                <span class="user-chip">
+                    <span class="user-name">{{ app.user.displayName }}</span>
+                    <span class="role-badge">{{ ('role.' ~ (is_granted('ROLE_ADMIN') ? 'admin' : 'member'))|trans }}</span>
+                </span>
+                <a class="btn btn-quiet" href="{{ logout_path() }}">{{ 'security.logout'|trans }}</a>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+<main id="main" class="wrap">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="notice notice-{{ label }}" role="status">{{ message|trans }}</div>
+        {% endfor %}
+    {% endfor %}
+    {% block body %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+    <div class="wrap">{{ 'app.footer'|trans }}</div>
+</footer>
+{% block javascripts %}{% endblock %}
+</body>
+</html>
